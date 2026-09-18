@@ -2,28 +2,76 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>JCP - Registre de Présence</title>
+
+<!-- PWA Meta Tags -->
+<meta name="theme-color" content="#667eea">
+<meta name="description" content="Registre de présence JCP - Jeunesse de la Cité de Paix">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="JCP Présence">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23667eea'/%3E%3Cstop offset='100%25' style='stop-color:%23764ba2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='100' fill='url(%23g)'/%3E%3Ctext x='256' y='330' font-family='Arial,sans-serif' font-size='220' font-weight='900' fill='white' text-anchor='middle'%3EJCP%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23667eea'/%3E%3Cstop offset='100%25' style='stop-color:%23764ba2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='100' fill='url(%23g)'/%3E%3Ctext x='256' y='330' font-family='Arial,sans-serif' font-size='220' font-weight='900' fill='white' text-anchor='middle'%3EJCP%3C/text%3E%3C/svg%3E">
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
   :root {
     --primary: #667eea; --primary-dark: #764ba2;
-    --success: #10b981; --danger: #ef4444;
+    --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
     --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
     --gray-500: #6b7280; --gray-700: #374151; --gray-800: #1f2937;
   }
-  body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+  body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; padding-top: max(20px, env(safe-area-inset-top)); }
   .container { max-width: 1100px; margin: 0 auto; }
-  .header { text-align: center; color: white; margin-bottom: 30px; padding-top: 20px; }
+  .header { text-align: center; color: white; margin-bottom: 20px; padding-top: 10px; }
   .header .logo {
     width: 80px; height: 80px; margin: 0 auto 15px; border-radius: 50%;
     background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
     display: flex; align-items: center; justify-content: center;
     border: 2px solid rgba(255,255,255,0.4); font-size: 26px; font-weight: 700;
   }
-  .header h1 { font-size: 28px; font-weight: 700; margin-bottom: 5px; }
-  .header p { opacity: 0.9; font-size: 14px; }
+  .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 5px; }
+  .header p { opacity: 0.9; font-size: 13px; }
+
+  /* INSTALL BANNER */
+  .install-banner {
+    max-width: 600px; margin: 0 auto 15px;
+    padding: 14px 18px; border-radius: 14px;
+    background: white; color: var(--gray-800);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    display: flex; align-items: center; gap: 12px;
+    animation: slideDown 0.5s ease;
+  }
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+  .install-banner .icon { font-size: 28px; }
+  .install-banner .text { flex: 1; font-size: 13px; line-height: 1.4; }
+  .install-banner .text strong { display: block; font-size: 14px; color: var(--primary); margin-bottom: 2px; }
+  .install-banner button { padding: 8px 14px; font-size: 12px; border-radius: 10px; border: none; background: var(--primary); color: white; font-weight: 600; cursor: pointer; }
+  .install-banner .close { background: transparent; color: var(--gray-500); padding: 8px; font-size: 18px; }
+
+  .connection-status {
+    max-width: 600px; margin: 0 auto 15px;
+    padding: 10px 18px; border-radius: 12px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 12px; font-weight: 500;
+    transition: all 0.3s;
+  }
+  .connection-status.online {
+    background: rgba(16, 185, 129, 0.2); color: white;
+    border: 1px solid rgba(16, 185, 129, 0.5);
+  }
+  .connection-status.offline {
+    background: rgba(245, 158, 11, 0.25); color: white;
+    border: 1px solid rgba(245, 158, 11, 0.5);
+  }
+  .connection-status .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: currentColor; animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
   .tabs {
     display: flex; gap: 10px; margin-bottom: 20px;
     background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
@@ -33,11 +81,18 @@
   .tab {
     flex: 1; padding: 12px; border: none; background: transparent;
     color: white; font-weight: 600; border-radius: 12px; cursor: pointer;
-    transition: all 0.3s; font-size: 14px;
+    transition: all 0.3s; font-size: 14px; position: relative;
   }
   .tab.active { background: white; color: var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+  .tab .badge-count {
+    position: absolute; top: 4px; right: 8px;
+    background: var(--danger); color: white;
+    font-size: 10px; font-weight: 700;
+    padding: 2px 6px; border-radius: 10px;
+    min-width: 18px; text-align: center;
+  }
   .card {
-    background: white; border-radius: 24px; padding: 32px;
+    background: white; border-radius: 24px; padding: 28px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.15); margin-bottom: 20px;
     animation: fadeIn 0.4s ease;
   }
@@ -47,11 +102,15 @@
   .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px; }
   .form-group input, .form-group select {
     width: 100%; padding: 14px 16px; border: 2px solid var(--gray-200);
-    border-radius: 12px; font-size: 15px; outline: none;
+    border-radius: 12px; font-size: 16px; outline: none;
     transition: all 0.2s; font-family: inherit; background: white;
   }
   .form-group input:focus, .form-group select:focus {
     border-color: var(--primary); box-shadow: 0 0 0 4px rgba(102,126,234,0.1);
+  }
+  .code-input {
+    font-size: 32px !important; letter-spacing: 12px; text-align: center;
+    font-weight: 700 !important; padding: 20px !important;
   }
   .btn {
     padding: 14px 24px; border: none; border-radius: 12px;
@@ -61,10 +120,15 @@
   }
   .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; width: 100%; }
   .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(102,126,234,0.4); }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
   .btn-success { background: var(--success); color: white; }
   .btn-success:hover { background: #059669; }
   .btn-danger { background: var(--danger); color: white; }
   .btn-danger:hover { background: #dc2626; }
+  .btn-warning { background: var(--warning); color: white; }
+  .btn-warning:hover { background: #d97706; }
+  .btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); }
+  .btn-outline:hover { background: var(--primary); color: white; }
   .btn-small { padding: 8px 14px; font-size: 13px; }
   .success-msg {
     margin-top: 20px; padding: 16px; background: #d1fae5;
@@ -73,6 +137,18 @@
   }
   .success-msg p:first-child { color: #065f46; font-weight: 600; font-size: 15px; }
   .success-msg p:last-child { color: #047857; font-size: 13px; margin-top: 4px; }
+  .offline-msg {
+    margin-top: 20px; padding: 16px; background: #fef3c7;
+    border: 1px solid #fcd34d; border-radius: 12px; text-align: center;
+    animation: fadeIn 0.4s ease;
+  }
+  .offline-msg p:first-child { color: #92400e; font-weight: 600; font-size: 15px; }
+  .offline-msg p:last-child { color: #78350f; font-size: 13px; margin-top: 4px; }
+  .error-msg {
+    margin-top: 15px; padding: 14px; background: #fee2e2;
+    border: 1px solid #fca5a5; border-radius: 12px; text-align: center;
+    color: #991b1b; font-size: 14px; font-weight: 500;
+  }
   .section-title {
     font-size: 18px; font-weight: 700; color: var(--gray-800);
     margin-bottom: 20px; display: flex; align-items: center;
@@ -83,7 +159,7 @@
   .stat-card .label { font-size: 13px; color: var(--gray-500); font-weight: 500; }
   .stat-card .value { font-size: 28px; font-weight: 700; color: var(--primary); margin-top: 6px; }
   .stat-card .value.purple { color: var(--primary-dark); }
-  .stat-card .small-value { font-size: 15px !important; font-weight: 600; color: var(--gray-800) !important; margin-top: 10px; }
+  .stat-card .value.warning { color: var(--warning); }
   .table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid var(--gray-200); }
   table { width: 100%; border-collapse: collapse; font-size: 14px; }
   thead { background: var(--gray-50); }
@@ -95,14 +171,31 @@
   td { padding: 14px 16px; border-top: 1px solid var(--gray-100); color: var(--gray-700); }
   tbody tr:hover { background: rgba(102,126,234,0.04); }
   tbody tr:first-child td { border-top: none; }
+  tbody tr.pending { background: #fef3c7; }
+  tbody tr.pending:hover { background: #fde68a; }
   .badge { display: inline-block; padding: 4px 12px; background: #ede9fe; color: var(--primary-dark); border-radius: 20px; font-size: 12px; font-weight: 600; }
+  .badge-warning { background: #fef3c7; color: #92400e; }
+  .badge-success { background: #d1fae5; color: #065f46; }
   .empty-state { text-align: center; padding: 40px 20px; color: var(--gray-500); }
   .empty-state .icon { font-size: 48px; margin-bottom: 10px; opacity: 0.5; }
-  .activites-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-bottom: 20px; }
-  .activite-card { background: var(--gray-50); border: 2px solid var(--gray-200); border-radius: 14px; padding: 16px; transition: all 0.2s; }
+  .activites-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .activite-card {
+    background: var(--gray-50); border: 2px solid var(--gray-200);
+    border-radius: 16px; padding: 20px; transition: all 0.2s;
+  }
   .activite-card:hover { border-color: var(--primary); background: white; }
-  .activite-card .nom { font-weight: 600; color: var(--gray-800); margin-bottom: 6px; font-size: 15px; }
-  .activite-card .meta { font-size: 12px; color: var(--gray-500); margin-bottom: 12px; }
+  .activite-card .nom { font-weight: 700; color: var(--gray-800); margin-bottom: 6px; font-size: 16px; }
+  .activite-card .meta { font-size: 13px; color: var(--gray-500); margin-bottom: 14px; }
+  .activite-card .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .activite-code-display {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white; padding: 12px; border-radius: 10px;
+    text-align: center; margin: 12px 0;
+  }
+  .activite-code-display .label { font-size: 11px; opacity: 0.9; letter-spacing: 1px; }
+  .activite-code-display .code {
+    font-size: 24px; font-weight: 700; letter-spacing: 6px; margin-top: 4px;
+  }
   .activite-form { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 12px; align-items: end; }
   .activite-form .form-group { margin-bottom: 0; }
   .toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 20px; }
@@ -128,15 +221,46 @@
     transition: all 0.4s; z-index: 1000; max-width: 90%; text-align: center;
   }
   .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .toast.success { background: var(--success); }
+  .toast.warning { background: var(--warning); }
+  .toast.error { background: var(--danger); }
   .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6);
     backdrop-filter: blur(4px); display: flex;
     align-items: center; justify-content: center; padding: 20px; z-index: 999;
+    overflow-y: auto;
   }
   .modal-overlay.hidden { display: none; }
-  .modal { background: white; border-radius: 20px; padding: 28px; max-width: 400px; width: 100%; animation: fadeIn 0.3s ease; }
+  .modal {
+    background: white; border-radius: 20px; padding: 28px;
+    max-width: 500px; width: 100%; animation: fadeIn 0.3s ease;
+    margin: auto;
+  }
   .modal h3 { color: var(--gray-800); margin-bottom: 8px; font-size: 20px; }
   .modal p { color: var(--gray-500); font-size: 14px; margin-bottom: 20px; }
+  .qr-container {
+    text-align: center; padding: 20px;
+    background: var(--gray-50); border-radius: 16px; margin: 20px 0;
+  }
+  .qr-container canvas, .qr-container img {
+    max-width: 260px; width: 100%; height: auto;
+    display: block; margin: 0 auto;
+  }
+  .step-indicator { display: flex; gap: 8px; margin-bottom: 20px; justify-content: center; }
+  .step-dot {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--gray-200); color: var(--gray-500);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600; transition: all 0.3s;
+  }
+  .step-dot.active { background: var(--primary); color: white; transform: scale(1.1); }
+  .step-dot.done { background: var(--success); color: white; }
+  .code-info {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px; background: #fef3c7; border: 1px solid #fcd34d;
+    border-radius: 10px; margin-bottom: 15px; font-size: 13px; color: #92400e;
+  }
+  .code-info .icon { font-size: 20px; }
   @media (max-width: 720px) {
     .card { padding: 22px; }
     .header h1 { font-size: 22px; }
@@ -144,6 +268,7 @@
     .activite-form .btn { width: 100%; }
     th, td { padding: 10px 12px; font-size: 13px; }
     .stat-card .value { font-size: 24px; }
+    .code-input { font-size: 24px !important; letter-spacing: 8px; }
   }
 </style>
 </head>
@@ -156,8 +281,26 @@
     <p>Jeunesse de la Cité de Paix</p>
   </div>
 
+  <div id="installBanner" class="install-banner hidden">
+    <span class="icon">📲</span>
+    <div class="text">
+      <strong>Installer l'appli JCP</strong>
+      Accès rapide depuis ton écran d'accueil
+    </div>
+    <button onclick="installPWA()">Installer</button>
+    <button class="close" onclick="dismissInstall()">✕</button>
+  </div>
+
+  <div id="connectionStatus" class="connection-status online">
+    <span class="dot"></span>
+    <span id="connectionText">🌐 En ligne</span>
+  </div>
+
   <div class="tabs">
-    <button class="tab active" onclick="switchTab('membre', this)">✍️ Pointer</button>
+    <button class="tab active" onclick="switchTab('membre', this)">
+      ✍️ Pointer
+      <span id="pendingBadge" class="badge-count hidden">0</span>
+    </button>
     <button class="tab" onclick="switchTab('chef', this)">📊 Tableau de bord</button>
   </div>
 
@@ -166,28 +309,63 @@
     <div class="card" style="max-width: 500px; margin: 0 auto;">
       <h2 class="section-title" style="justify-content:center;">Marquer ma présence</h2>
 
-      <div id="membreLoading" class="loading">
-        <div class="spinner"></div>
-        <p>Chargement des activités...</p>
+      <div id="step-code">
+        <div class="step-indicator">
+          <div class="step-dot active">1</div>
+          <div class="step-dot">2</div>
+        </div>
+        <div class="code-info">
+          <span class="icon">📢</span>
+          <span>Demande le <strong>code à 4 chiffres</strong> annoncé, ou scanne le QR Code.</span>
+        </div>
+        <div class="form-group">
+          <label>Code de l'activité</label>
+          <input type="tel" id="codeInput" class="code-input" placeholder="0000" maxlength="4" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+        </div>
+        <button onclick="verifierCode()" class="btn btn-primary">➡️ Continuer</button>
+        <div id="codeError" class="error-msg hidden"></div>
       </div>
 
-      <form id="presenceForm" class="hidden">
-        <div class="form-group">
-          <label>Votre nom complet</label>
-          <input type="text" id="nom" placeholder="Ex : Jean Dupont" required autocomplete="off">
+      <div id="step-form" class="hidden">
+        <div class="step-indicator">
+          <div class="step-dot done">✓</div>
+          <div class="step-dot active">2</div>
         </div>
-        <div class="form-group">
-          <label>Activité</label>
-          <select id="activite" required>
-            <option value="">-- Choisir une activité --</option>
-          </select>
+        <div id="activiteInfo" style="text-align: center; margin-bottom: 20px; padding: 12px; background: #ecfdf5; border-radius: 10px; border: 1px solid #6ee7b7;">
+          <div style="font-size: 12px; color: #047857; font-weight: 600;">ACTIVITÉ VALIDÉE</div>
+          <div id="activiteNomAffiche" style="font-weight: 700; color: #065f46; margin-top: 4px;"></div>
         </div>
-        <button type="submit" class="btn btn-primary">✅ Marquer ma présence</button>
-      </form>
+        <form id="presenceForm">
+          <div class="form-group">
+            <label>Votre nom complet</label>
+            <input type="text" id="nom" placeholder="Ex : Jean Dupont" required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label>Votre contact (téléphone)</label>
+            <input type="tel" id="contact" placeholder="Ex : +243 81 23 45 67" required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label>Votre adresse</label>
+            <input type="text" id="adresse" placeholder="Ex : Kinshasa, Limete" required autocomplete="off">
+          </div>
+          <button type="submit" class="btn btn-primary">✅ Marquer ma présence</button>
+        </form>
+        <button onclick="retourCode()" class="btn btn-outline" style="width: 100%; margin-top: 10px; font-size: 13px; padding: 10px;">
+          ← Changer de code
+        </button>
+        <div id="successMsg" class="success-msg hidden">
+          <p>✨ Présence enregistrée !</p>
+          <p>Que Dieu te bénisse 🙏</p>
+        </div>
+        <div id="offlineMsg" class="offline-msg hidden">
+          <p>📶 Pas de connexion internet</p>
+          <p>Ta présence a été sauvegardée. Elle sera envoyée dès que tu auras internet.</p>
+        </div>
+      </div>
 
-      <div id="successMsg" class="success-msg hidden">
-        <p>✨ Présence enregistrée avec succès !</p>
-        <p>Que Dieu te bénisse 🙏</p>
+      <div id="membreLoading" class="loading">
+        <div class="spinner"></div>
+        <p>Chargement...</p>
       </div>
     </div>
   </div>
@@ -211,6 +389,9 @@
         </div>
         <button type="submit" class="btn btn-primary">Créer</button>
       </form>
+      <p style="font-size: 12px; color: var(--gray-500); margin-top: 12px;">
+        💡 Un code à 4 chiffres et un QR Code seront générés automatiquement.
+      </p>
     </div>
 
     <div class="card">
@@ -231,8 +412,20 @@
         <div class="value purple" id="totalActivites">0</div>
       </div>
       <div class="stat-card">
-        <div class="label">Dernière présence</div>
-        <div class="small-value" id="dernierePresence">—</div>
+        <div class="label">En attente de sync</div>
+        <div class="value warning" id="totalPending">0</div>
+      </div>
+    </div>
+
+    <div id="syncBanner" class="card hidden" style="background: #fef3c7; border: 2px solid #fcd34d;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap;">
+        <div>
+          <div style="font-weight: 700; color: #92400e;">📶 Pointages en attente</div>
+          <div style="font-size: 13px; color: #78350f; margin-top: 4px;">
+            <span id="pendingCountText">0</span> présence(s) en attente de synchronisation.
+          </div>
+        </div>
+        <button class="btn btn-warning btn-small" onclick="synchroniserMaintenant()">🔄 Synchroniser</button>
       </div>
     </div>
 
@@ -254,8 +447,11 @@
             <tr>
               <th>#</th>
               <th>Nom</th>
+              <th>Contact</th>
+              <th>Adresse</th>
               <th>Activité</th>
               <th>Date & heure</th>
+              <th>Statut</th>
             </tr>
           </thead>
           <tbody id="presencesTable"></tbody>
@@ -265,7 +461,6 @@
   </div>
 </div>
 
-<!-- MODAL MOT DE PASSE -->
 <div id="passwordModal" class="modal-overlay hidden">
   <div class="modal">
     <h3>🔐 Accès responsable</h3>
@@ -277,346 +472,2077 @@
   </div>
 </div>
 
+<div id="qrModal" class="modal-overlay hidden">
+  <div class="modal">
+    <h3 style="text-align:center;">📱 QR Code de l'activité</h3>
+    <p style="text-align:center;">Affiche ce QR Code aux jeunes pour qu'ils scannent</p>
+    <div class="qr-container">
+      <div id="qrcode"></div>
+    </div>
+    <div style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 16px; border-radius: 12px; text-align: center; margin-bottom: 20px;">
+      <div style="font-size: 12px; opacity: 0.9; letter-spacing: 2px;">CODE À 4 CHIFFRES</div>
+      <div id="qrCodeText" style="font-size: 40px; font-weight: 700; letter-spacing: 8px; margin-top: 6px;">0000</div>
+    </div>
+    <p style="text-align:center; font-size: 12px; color: var(--gray-500);">
+      📢 Annonce aussi ce code à voix haute
+    </p>
+    <button class="btn btn-primary" onclick="closeQR()" style="margin-top: 15px;">Fermer</button>
+  </div>
+</div>
+
 <div id="toast" class="toast"></div>
 
-<!-- =====================================================
-     FIREBASE SDK + LOGIQUE
-     ===================================================== -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-  getFirestore, collection, addDoc, deleteDoc, doc,
-  onSnapshot, query, orderBy, serverTimestamp, writeBatch, getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
-/* ============ TA CONFIG FIREBASE (déjà remplie !) ============ */
-const firebaseConfig = {
-  apiKey: "AIzaSyClpmA2ALxOVTaVYiP7VX9p9cQrT92rNlU",
-  authDomain: "jeunesse-539c3.firebaseapp.com",
-  projectId: "jeunesse-539c3",
-  storageBucket: "jeunesse-539c3.firebasestorage.app",
-  messagingSenderId: "650737435601",
-  appId: "1:650737435601:web:6f0d089531a58c34c6d6f0"
-};
+<script>
+/* =====================================================
+   PARTIE 1 : PWA - MANIFEST + SERVICE WORKER INTÉGRÉS
+   ===================================================== */
 
-/* ============ MOT DE PASSE DU CHEF (change-le !) ============ */
-const CHEF_PASSWORD = "jcp2024"; // ← ⚠️ CHANGE CE MOT DE PASSE
+// --- Génération du manifest PWA ---
+(function generateManifest() {
+  const iconSVG = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#667eea"/><stop offset="100%" style="stop-color:#764ba2"/></linearGradient></defs><rect width="512" height="512" rx="100" fill="url(#g)"/><text x="256" y="330" font-family="Arial,sans-serif" font-size="220" font-weight="900" fill="white" text-anchor="middle">JCP</text></svg>`)}`;
 
-/* ============ INITIALISATION ============ */
-let db;
-try {
-  const app = initializeApp(firebaseConfig);
-  db = getFirestore(app);
-} catch (e) {
-  console.error("Erreur Firebase :", e);
-}
+  const manifest = {
+    name: "JCP - Registre de Présence",
+    short_name: "JCP Présence",
+    description: "Registre de présence en ligne pour la Jeunesse de la Cité de Paix",
+    start_url: "./index.html",
+    scope: "./",
+    display: "standalone",
+    orientation: "portrait",
+    background_color: "#667eea",
+    theme_color: "#667eea",
+    lang: "fr",
+    icons: [
+      { src: iconSVG, sizes: "192x192", type: "image/svg+xml", purpose: "any" },
+      { src: iconSVG, sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }
+    ]
+  };
 
-let ACTIVITES = [];
-let PRESENCES = [];
-let isChefUnlocked = false;
+  const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('link');
+  link.rel = 'manifest';
+  link.href = url;
+  document.head.appendChild(link);
+})();
 
-/* ============ NAVIGATION ONGLETS ============ */
-window.switchTab = function(tab, btn) {
-  if (tab === 'chef' && !isChefUnlocked) {
-    document.getElementById('passwordModal').classList.remove('hidden');
-    document.getElementById('pwdInput').value = '';
-    document.getElementById('pwdInput').focus();
-    window._pendingTab = btn;
+// --- Enregistrement du Service Worker (via Blob) ---
+(function registerServiceWorker() {
+  if (!('serviceWorker' in navigator)) {
+    console.warn('⚠️ Service Worker non supporté');
     return;
   }
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-  document.getElementById('view-' + tab).classList.remove('hidden');
-};
 
-window.checkPassword = function() {
-  const val = document.getElementById('pwdInput').value;
-  if (val === CHEF_PASSWORD) {
-    isChefUnlocked = true;
-    document.getElementById('passwordModal').classList.add('hidden');
-    if (window._pendingTab) {
-      switchTab('chef', window._pendingTab);
-      window._pendingTab = null;
-    }
-  } else {
-    showToast('❌ Mot de passe incorrect');
-    document.getElementById('pwdInput').value = '';
+  const swCode = `
+    const CACHE_NAME = 'jcp-cache-v1';
+    const FILES_TO_CACHE = [
+      './',
+      './index.html',
+      'https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js',
+      'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap',
+      'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js',
+      'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js'
+    ];
+
+    self.addEventListener('install', (event) => {
+      console.log('[SW] Installation');
+      event.waitUntil(
+        caches.open(CACHE_NAME).then((cache) => {
+          return cache.addAll(FILES_TO_CACHE).catch(err => {
+            console.warn('[SW] Certains fichiers non cachés:', err);
+          });
+        })
+      );
+      self.skipWaiting();
+    });
+
+    self.addEventListener('activate', (event) => {
+      console.log('[SW] Activation');
+      event.waitUntil(
+        caches.keys().then((keys) => {
+          return Promise.all(
+            keys.map((key) => {
+              if (key !== CACHE_NAME) return caches.delete(key);
+            })
+          );
+        })
+      );
+      self.clients.claim();
+    });
+
+    self.addEventListener('fetch', (event) => {
+      const url = new URL(event.request.url);
+
+      // Ne pas intercepter Firebase (nécessite internet)
+      if (url.hostname.includes('firestore.googleapis.com') ||
+          url.hostname.includes('firebaseio.com')) {
+        return;
+      }
+
+      // Ne pas intercepter les requêtes non-GET
+      if (event.request.method !== 'GET') return;
+
+      event.respondWith(
+        caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) {
+            // Servir depuis le cache + mettre à jour en arrière-plan
+            fetch(event.request).then((response) => {
+              if (response && response.status === 200) {
+                caches.open(CACHE_NAME).then((cache) => {
+                  cache.put(event.request, response.clone());
+                });
+              }
+            }).catch(() => {});
+            return cachedResponse;
+          }
+
+          // Pas en cache → internet
+          return fetch(event.request).then((response) => {
+            if (response && response.status === 200 && event.request.method === 'GET') {
+              const responseClone = response.clone();
+              caches.open(CACHE_NAME).then((cache) => {
+                cache.put(event.request, responseClone);
+              });
+            }
+            return response;
+          }).catch(() => {
+            if (event.request.mode === 'navigate') {
+              return caches.match('./index.html');
+            }
+          });
+        })
+      );
+    });
+  `;
+
+  const blob = new Blob([swCode], { type: 'application/javascript' });
+  const swUrl = URL.createObjectURL(blob);
+
+  navigator.serviceWorker.register(swUrl)
+    .then(reg => console.log('✅ Service Worker enregistré:', reg.scope))
+    .catch(err => console.warn('⚠️ Erreur SW:', err));
+})();
+
+// --- Bandeau installation PWA ---
+let deferredPrompt = null;
+const INSTALL_DISMISSED = localStorage.getItem('jcp_install_dismissed');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (!INSTALL_DISMISSED && !window.matchMedia('(display-mode: standalone)').matches) {
+    document.getElementById('installBanner').classList.remove('hidden');
   }
-};
-
-document.getElementById('pwdInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') checkPassword();
 });
 
-/* ============ ÉCOUTE TEMPS RÉEL FIRESTORE ============ */
-function listenFirestore() {
-  if (!db) return showToast('⚠️ Firebase non configuré');
-
-  onSnapshot(
-    query(collection(db, 'activites'), orderBy('createdAt', 'desc')),
-    (snap) => {
-      ACTIVITES = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderMembreForm();
-      renderActivitesList();
-      renderStats();
-      refreshFiltre();
-    },
-    (err) => console.error("Erreur activites:", err)
-  );
-
-  onSnapshot(
-    query(collection(db, 'presences'), orderBy('createdAt', 'desc')),
-    (snap) => {
-      PRESENCES = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderPresencesTable();
-      renderStats();
-    },
-    (err) => console.error("Erreur presences:", err)
-  );
-}
-
-/* ============ VUE MEMBRE ============ */
-function renderMembreForm() {
-  const loading = document.getElementById('membreLoading');
-  const form = document.getElementById('presenceForm');
-  const select = document.getElementById('activite');
-  const current = select.value;
-
-  loading.classList.add('hidden');
-  form.classList.remove('hidden');
-  select.innerHTML = '<option value="">-- Choisir une activité --</option>';
-
-  if (ACTIVITES.length === 0) {
-    const opt = document.createElement('option');
-    opt.disabled = true;
-    opt.textContent = "Aucune activité disponible";
-    select.appendChild(opt);
+window.installPWA = async function() {
+  if (!deferredPrompt) {
+    showToast('ℹ️ Menu navigateur → "Ajouter à l\'écran d\'accueil"', 'warning');
     return;
   }
-  ACTIVITES.forEach(a => {
-    const opt = document.createElement('option');
-    opt.value = a.id;
-    opt.textContent = `${a.nom} — ${formatDate(a.date)}${a.heure ? ' à ' + a.heure : ''}`;
-    select.appendChild(opt);
-  });
-  if (current && ACTIVITES.some(a => a.id === current)) select.value = current;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if (outcome === 'accepted') showToast('✅ Appli installée !', 'success');
+  deferredPrompt = null;
+  document.getElementById('installBanner').classList.add('hidden');
+};
+
+window.dismissInstall = function() {
+  localStorage.setItem('jcp_install_dismissed', '1');
+  document.getElementById('installBanner').classList.add('hidden');
+};
+
+if (window.matchMedia('(display-mode: standalone)').matches) {
+  document.getElementById('installBanner').classList.add('hidden');
 }
 
-/* ============ ENREGISTRER UNE PRÉSENCE ============ */
-document.getElementById('presenceForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  if (!db) return showToast('⚠️ Firebase non configuré');
+/* =====================================================
+   PARTIE 2 : LOGIQUE PRINCIPALE (Firebase + UI)
+   ===================================================== */
 
-  const nom = document.getElementById('nom').value.trim();
-  const activiteId = document.getElementById('activite').value;
-  if (!nom) return showToast('⚠️ Entre ton nom');
-  if (!activiteId) return showToast('⚠️ Choisis une activité');
+// Chargement dynamique des modules Firebase
+(async function initApp() {
+  let db = null;
+  let firebaseReady = false;
+  let addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp, writeBatch, getDocs, collection;
 
-  const activite = ACTIVITES.find(a => a.id === activiteId);
-  if (!activite) return showToast('❌ Activité introuvable');
+  const firebaseConfig = {
+    apiKey: "AIzaSyClpmA2ALxOVTaVYiP7VX9p9cQrT92rNlU",
+    authDomain: "jeunesse-539c3.firebaseapp.com",
+    projectId: "jeunesse-539c3",
+    storageBucket: "jeunesse-539c3.firebasestorage.app",
+    messagingSenderId: "650737435601",
+    appId: "1:650737435601:web:6f0d089531a58c34c6d6f0"
+  };
 
-  const deja = PRESENCES.find(p =>
-    p.activiteId === activiteId &&
-    (p.nom || '').toLowerCase() === nom.toLowerCase()
-  );
-  if (deja) return showToast('ℹ️ Tu as déjà pointé pour cette activité');
-
-  const btn = this.querySelector('button[type="submit"]');
-  btn.disabled = true;
-  btn.textContent = '⏳ Envoi...';
+  const CHEF_PASSWORD = "jcp2024";
+  const LS_PENDING = 'jcp_pending_presences';
+  const LS_ACTIVITES_CACHE = 'jcp_activites_cache';
 
   try {
-    await addDoc(collection(db, 'presences'), {
-      nom, activiteId,
-      activiteNom: activite.nom,
-      createdAt: serverTimestamp()
-    });
-    document.getElementById('presenceForm').reset();
-    const msg = document.getElementById('successMsg');
-    msg.classList.remove('hidden');
-    setTimeout(() => msg.classList.add('hidden'), 4000);
-    showToast('✅ Présence enregistrée !');
-  } catch (err) {
-    console.error(err);
-    showToast('❌ Erreur : ' + err.message);
-  } finally {
+    const appMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+    const fsMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+
+    const app = appMod.initializeApp(firebaseConfig);
+    db = fsMod.getFirestore(app);
+    addDoc = fsMod.addDoc;
+    deleteDoc = fsMod.deleteDoc;
+    doc = fsMod.doc;
+    onSnapshot = fsMod.onSnapshot;
+    query = fsMod.query;
+    orderBy = fsMod.orderBy;
+    serverTimestamp = fsMod.serverTimestamp;
+    writeBatch = fsMod.writeBatch;
+    getDocs = fsMod.getDocs;
+    collection = fsMod.collection;
+    firebaseReady = true;
+  } catch (e) {
+    console.error("Erreur Firebase :", e);
+  }
+
+  let ACTIVITES = [];
+  let PRESENCES = [];
+  let PENDING = [];
+  let isChefUnlocked = false;
+  let activiteValidee = null;
+  let isOnline = navigator.onLine;
+
+  // ===== STATUT CONNEXION =====
+  function updateConnectionStatus() {
+    isOnline = navigator.onLine;
+    const status = document.getElementById('connectionStatus');
+    const text = document.getElementById('connectionText');
+
+    if (isOnline && firebaseReady) {
+      status.className = 'connection-status online';
+      text.textContent = '🌐 En ligne — Synchronisation active';
+      setTimeout(synchroniserPending, 500);
+    } else if (!isOnline) {
+      status.className = 'connection-status offline';
+      text.textContent = '📶 Hors ligne — Les pointages seront sauvegardés';
+    } else {
+      status.className = 'connection-status offline';
+      text.textContent = '⚠️ Firebase non configuré';
+    }
+    updatePendingBadge();
+  }
+
+  window.addEventListener('online', updateConnectionStatus);
+  window.addEventListener('offline', updateConnectionStatus);
+
+  // ===== GESTION POINTAGES EN ATTENTE =====
+  function loadPending() {
+    try { PENDING = JSON.parse(localStorage.getItem(LS_PENDING)) || []; }
+    catch { PENDING = []; }
+  }
+  function savePending() {
+    localStorage.setItem(LS_PENDING, JSON.stringify(PENDING));
+    updatePendingBadge();
+  }
+  function addPending(presence) {
+    presence._localId = 'local_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+    presence._createdAtLocal = new Date().toISOString();
+    PENDING.push(presence);
+    savePending();
+  }
+  function removePending(localId) {
+    PENDING = PENDING.filter(p => p._localId !== localId);
+    savePending();
+  }
+
+  function updatePendingBadge() {
+    const badge = document.getElementById('pendingBadge');
+    const count = PENDING.length;
+    if (count > 0) {
+      badge.textContent = count;
+      badge.classList.remove('hidden');
+    } else {
+      badge.classList.add('hidden');
+    }
+    const totalPending = document.getElementById('totalPending');
+    if (totalPending) totalPending.textContent = count;
+    const syncBanner = document.getElementById('syncBanner');
+    const pendingCountText = document.getElementById('pendingCountText');
+    if (syncBanner && pendingCountText) {
+      if (count > 0) {
+        syncBanner.classList.remove('hidden');
+        pendingCountText.textContent = count;
+      } else {
+        syncBanner.classList.add('hidden');
+      }
+    }
+    renderPresencesTable();
+  }
+
+  // ===== SYNCHRONISATION =====
+  async function synchroniserPending() {
+    if (!db || !navigator.onLine || PENDING.length === 0) return;
+    let succes = 0;
+    const aRetirer = [];
+    for (const p of PENDING) {
+      try {
+        await addDoc(collection(db, 'presences'), {
+          nom: p.nom, contact: p.contact, adresse: p.adresse,
+          activiteId: p.activiteId, activiteNom: p.activiteNom,
+          createdAt: serverTimestamp(), syncedAt: serverTimestamp()
+        });
+        aRetirer.push(p._localId);
+        succes++;
+      } catch (err) { console.error("Échec sync:", err); }
+    }
+    aRetirer.forEach(id => removePending(id));
+    if (succes > 0) showToast(`✅ ${succes} présence(s) synchronisée(s) !`, 'success');
+  }
+
+  window.synchroniserMaintenant = async function() {
+    if (!navigator.onLine) return showToast('📶 Pas de connexion', 'warning');
+    if (PENDING.length === 0) return showToast('ℹ️ Aucun pointage en attente', 'success');
+    showToast('⏳ Synchronisation...');
+    await synchroniserPending();
+  };
+
+  // ===== NAVIGATION =====
+  window.switchTab = function(tab, btn) {
+    if (tab === 'chef' && !isChefUnlocked) {
+      document.getElementById('passwordModal').classList.remove('hidden');
+      document.getElementById('pwdInput').value = '';
+      document.getElementById('pwdInput').focus();
+      window._pendingTab = btn;
+      return;
+    }
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+    document.getElementById('view-' + tab).classList.remove('hidden');
+    if (tab === 'chef') renderPresencesTable();
+  };
+
+  window.checkPassword = function() {
+    const val = document.getElementById('pwdInput').value;
+    if (val === CHEF_PASSWORD) {
+      isChefUnlocked = true;
+      document.getElementById('passwordModal').classList.add('hidden');
+      if (window._pendingTab) {
+        switchTab('chef', window._pendingTab);
+        window._pendingTab = null;
+      }
+    } else {
+      showToast('❌ Mot de passe incorrect', 'error');
+      document.getElementById('pwdInput').value = '';
+    }
+  };
+
+  document.getElementById('pwdInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkPassword();
+  });
+
+  // ===== CACHE ACTIVITÉS =====
+  function cacherActivites(activites) {
+    try {
+      localStorage.setItem(LS_ACTIVITES_CACHE, JSON.stringify(
+        activites.map(a => ({ id: a.id, nom: a.nom, date: a.date, heure: a.heure, code: a.code }))
+      ));
+    } catch (e) {}
+  }
+  function chargerActivitesCache() {
+    try {
+      const cached = JSON.parse(localStorage.getItem(LS_ACTIVITES_CACHE));
+      if (cached && Array.isArray(cached)) ACTIVITES = cached;
+    } catch (e) {}
+  }
+
+  // ===== ÉCOUTE FIRESTORE =====
+  function listenFirestore() {
+    if (!db) {
+      chargerActivitesCache();
+      document.getElementById('membreLoading').classList.add('hidden');
+      return;
+    }
+    chargerActivitesCache();
+
+    onSnapshot(
+      query(collection(db, 'activites'), orderBy('createdAt', 'desc')),
+      (snap) => {
+        ACTIVITES = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        cacherActivites(ACTIVITES);
+        renderActivitesList();
+        renderStats();
+        refreshFiltre();
+        document.getElementById('membreLoading').classList.add('hidden');
+      },
+      (err) => {
+        console.error("Erreur activites:", err);
+        document.getElementById('membreLoading').classList.add('hidden');
+      }
+    );
+
+    onSnapshot(
+      query(collection(db, 'presences'), orderBy('createdAt', 'desc')),
+      (snap) => {
+        PRESENCES = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderPresencesTable();
+        renderStats();
+      },
+      (err) => console.error("Erreur presences:", err)
+    );
+  }
+
+  // ===== VÉRIFICATION CODE =====
+  window.verifierCode = function() {
+    const code = document.getElementById('codeInput').value.trim();
+    const errDiv = document.getElementById('codeError');
+    errDiv.classList.add('hidden');
+
+    if (!code || code.length !== 4) {
+      errDiv.textContent = '⚠️ Entre un code à 4 chiffres';
+      errDiv.classList.remove('hidden');
+      return;
+    }
+    const activite = ACTIVITES.find(a => a.code === code);
+    if (!activite) {
+      errDiv.textContent = '❌ Code invalide. Vérifie avec le responsable.';
+      errDiv.classList.remove('hidden');
+      return;
+    }
+    const actDate = new Date(activite.date + 'T00:00:00');
+    const maintenant = new Date();
+    const heures24 = 24 * 60 * 60 * 1000;
+    if ((maintenant - actDate) > (heures24 * 2)) {
+      errDiv.textContent = '⏰ Ce code n\'est plus valide.';
+      errDiv.classList.remove('hidden');
+      return;
+    }
+    activiteValidee = activite;
+    document.getElementById('activiteNomAffiche').textContent = 
+      `${activite.nom} — ${formatDate(activite.date)}`;
+    document.getElementById('step-code').classList.add('hidden');
+    document.getElementById('step-form').classList.remove('hidden');
+    document.getElementById('nom').focus();
+  };
+
+  window.retourCode = function() {
+    activiteValidee = null;
+    document.getElementById('codeInput').value = '';
+    document.getElementById('step-form').classList.add('hidden');
+    document.getElementById('step-code').classList.remove('hidden');
+    document.getElementById('successMsg').classList.add('hidden');
+    document.getElementById('offlineMsg').classList.add('hidden');
+  };
+
+  document.getElementById('codeInput').addEventListener('input', function(e) {
+    this.value = this.value.replace(/\D/g, '').slice(0, 4);
+    if (this.value.length === 4) setTimeout(verifierCode, 300);
+  });
+
+  document.getElementById('codeInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') verifierCode();
+  });
+
+  // ===== ENREGISTRER PRÉSENCE =====
+  document.getElementById('presenceForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (!activiteValidee) return showToast('⚠️ Code non validé', 'error');
+
+    const nom = document.getElementById('nom').value.trim();
+    const contact = document.getElementById('contact').value.trim();
+    const adresse = document.getElementById('adresse').value.trim();
+    if (!nom) return showToast('⚠️ Entre ton nom', 'error');
+    if (!contact) return showToast('⚠️ Entre ton contact', 'error');
+    if (!adresse) return showToast('⚠️ Entre ton adresse', 'error');
+
+    const dejaServeur = PRESENCES.find(p =>
+      p.activiteId === activiteValidee.id && (p.nom || '').toLowerCase() === nom.toLowerCase()
+    );
+    const dejaLocal = PENDING.find(p =>
+      p.activiteId === activiteValidee.id && (p.nom || '').toLowerCase() === nom.toLowerCase()
+    );
+    if (dejaServeur || dejaLocal) {
+      return showToast('ℹ️ Tu as déjà pointé', 'warning');
+    }
+
+    const btn = this.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = '⏳ Enregistrement...';
+
+    const presenceData = {
+      nom, contact, adresse,
+      activiteId: activiteValidee.id,
+      activiteNom: activiteValidee.nom
+    };
+
+    if (navigator.onLine && db) {
+      try {
+        await addDoc(collection(db, 'presences'), {
+          ...presenceData, createdAt: serverTimestamp()
+        });
+        document.getElementById('presenceForm').reset();
+        document.getElementById('successMsg').classList.remove('hidden');
+        showToast('✅ Présence enregistrée !', 'success');
+        setTimeout(retourCode, 4000);
+      } catch (err) {
+        console.error("Erreur en ligne:", err);
+        addPending(presenceData);
+        document.getElementById('presenceForm').reset();
+        document.getElementById('offlineMsg').classList.remove('hidden');
+        showToast('📶 Sauvegardé localement', 'warning');
+        setTimeout(retourCode, 5000);
+      }
+    } else {
+      addPending(presenceData);
+      document.getElementById('presenceForm').reset();
+      document.getElementById('offlineMsg').classList.remove('hidden');
+      showToast('📶 Sauvegardé ! Sync bientôt', 'warning');
+      setTimeout(retourCode, 5000);
+    }
+
     btn.disabled = false;
     btn.textContent = '✅ Marquer ma présence';
+  });
+
+  // ===== CRÉER ACTIVITÉ =====
+  function genererCode() {
+    let code, existe = true, tentatives = 0;
+    do {
+      code = Math.floor(1000 + Math.random() * 9000).toString();
+      existe = ACTIVITES.some(a => a.code === code);
+      tentatives++;
+    } while (existe && tentatives < 50);
+    return code;
   }
-});
 
-/* ============ CRÉER UNE ACTIVITÉ ============ */
-document.getElementById('activiteForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  if (!db) return showToast('⚠️ Firebase non configuré');
+  document.getElementById('activiteForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (!db) return showToast('⚠️ Firebase non configuré', 'error');
+    if (!navigator.onLine) return showToast('📶 Connexion requise', 'warning');
 
-  const nom = document.getElementById('actNom').value.trim();
-  const date = document.getElementById('actDate').value;
-  const heure = document.getElementById('actHeure').value;
-  if (!nom || !date) return showToast('⚠️ Nom et date obligatoires');
+    const nom = document.getElementById('actNom').value.trim();
+    const date = document.getElementById('actDate').value;
+    const heure = document.getElementById('actHeure').value;
+    if (!nom || !date) return showToast('⚠️ Nom et date obligatoires', 'error');
 
-  try {
-    await addDoc(collection(db, 'activites'), {
-      nom, date, heure, createdAt: serverTimestamp()
+    const code = genererCode();
+    try {
+      await addDoc(collection(db, 'activites'), {
+        nom, date, heure, code, createdAt: serverTimestamp()
+      });
+      e.target.reset();
+      document.getElementById('actDate').value = new Date().toISOString().split('T')[0];
+      showToast(`✅ Activité créée ! Code : ${code}`, 'success');
+    } catch (err) {
+      showToast('❌ Erreur : ' + err.message, 'error');
+    }
+  });
+
+  // ===== AFFICHER ACTIVITÉS =====
+  function renderActivitesList() {
+    const container = document.getElementById('activitesList');
+    if (!container) return;
+    document.getElementById('activitesCount').textContent = ACTIVITES.length;
+    if (ACTIVITES.length === 0) {
+      container.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;">
+        <div class="icon">📭</div><p>Aucune activité créée</p></div>`;
+      return;
+    }
+    container.innerHTML = ACTIVITES.map(a => `
+      <div class="activite-card">
+        <div class="nom">${escapeHtml(a.nom)}</div>
+        <div class="meta">📅 ${formatDate(a.date)}${a.heure ? ' • 🕐 ' + a.heure : ''}</div>
+        <div class="activite-code-display">
+          <div class="label">CODE À 4 CHIFFRES</div>
+          <div class="code">${a.code || '----'}</div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary btn-small" onclick="afficherQR('${a.id}')">📱 QR Code</button>
+          <button class="btn btn-danger btn-small" onclick="supprimerActivite('${a.id}')">🗑️</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  window.afficherQR = function(id) {
+    const activite = ACTIVITES.find(a => a.id === id);
+    if (!activite) return;
+    const url = window.location.origin + window.location.pathname + '?code=' + activite.code;
+    const qrDiv = document.getElementById('qrcode');
+    qrDiv.innerHTML = '';
+    new QRCode(qrDiv, {
+      text: url, width: 260, height: 260,
+      colorDark: "#1f2937", colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
     });
-    e.target.reset();
-    showToast('✅ Activité créée !');
-  } catch (err) {
-    showToast('❌ Erreur : ' + err.message);
-  }
-});
+    document.getElementById('qrCodeText').textContent = activite.code;
+    document.getElementById('qrModal').classList.remove('hidden');
+  };
 
-/* ============ AFFICHER LES ACTIVITÉS ============ */
-function renderActivitesList() {
-  const container = document.getElementById('activitesList');
-  document.getElementById('activitesCount').textContent = ACTIVITES.length;
-  if (ACTIVITES.length === 0) {
-    container.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;">
-      <div class="icon">📭</div><p>Aucune activité créée</p></div>`;
+  window.closeQR = function() {
+    document.getElementById('qrModal').classList.add('hidden');
+    document.getElementById('qrcode').innerHTML = '';
+  };
+
+  window.supprimerActivite = async function(id) {
+    if (!confirm("Supprimer cette activité et ses présences ?")) return;
+    if (!db) return;
+    if (!navigator.onLine) return showToast('📶 Connexion requise', 'warning');
+    try {
+      await deleteDoc(doc(db, 'activites', id));
+      const toDelete = PRESENCES.filter(p => p.activiteId === id);
+      for (const p of toDelete) await deleteDoc(doc(db, 'presences', p.id));
+      showToast('🗑️ Activité supprimée', 'success');
+    } catch (err) {
+      showToast('❌ Erreur : ' + err.message, 'error');
+    }
+  };
+
+  // ===== STATS =====
+  function renderStats() {
+    const el1 = document.getElementById('totalPresences');
+    const el2 = document.getElementById('totalActivites');
+    const el3 = document.getElementById('totalPending');
+    if (el1) el1.textContent = PRESENCES.length;
+    if (el2) el2.textContent = ACTIVITES.length;
+    if (el3) el3.textContent = PENDING.length;
+  }
+
+  // ===== TABLEAU PRÉSENCES =====
+  function renderPresencesTable() {
+    const tableEl = document.getElementById('presencesTable');
+    if (!tableEl) return;
+    const filtre = document.getElementById('filtreActivite').value;
+    let dataServeur = PRESENCES;
+    let dataPending = PENDING;
+    if (filtre) {
+      dataServeur = dataServeur.filter(p => p.activiteId === filtre);
+      dataPending = dataPending.filter(p => p.activiteId === filtre);
+    }
+    const totalCount = dataServeur.length + dataPending.length;
+    document.getElementById('presencesCount').textContent = totalCount;
+
+    if (totalCount === 0) {
+      tableEl.innerHTML = `<tr><td colspan="7">
+        <div class="empty-state"><div class="icon">👥</div>
+        <p>Aucune présence enregistrée</p></div></td></tr>`;
+      return;
+    }
+
+    const lignesPending = dataPending.map((p) => `
+      <tr class="pending">
+        <td>⏳</td>
+        <td><strong>${escapeHtml(p.nom)}</strong></td>
+        <td>${escapeHtml(p.contact || '—')}</td>
+        <td>${escapeHtml(p.adresse || '—')}</td>
+        <td><span class="badge">${escapeHtml(p.activiteNom || '—')}</span></td>
+        <td>${formatDateTime(p._createdAtLocal)}</td>
+        <td><span class="badge badge-warning">⏳ En attente</span></td>
+      </tr>
+    `).join('');
+
+    const lignesServeur = dataServeur.map((p, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td><strong>${escapeHtml(p.nom)}</strong></td>
+        <td>${escapeHtml(p.contact || '—')}</td>
+        <td>${escapeHtml(p.adresse || '—')}</td>
+        <td><span class="badge">${escapeHtml(p.activiteNom || '—')}</span></td>
+        <td>${formatDateTime(p.createdAt)}</td>
+        <td><span class="badge badge-success">✅ Enregistré</span></td>
+      </tr>
+    `).join('');
+
+    tableEl.innerHTML = lignesPending + lignesServeur;
+  }
+
+  function refreshFiltre() {
+    const select = document.getElementById('filtreActivite');
+    if (!select) return;
+    const current = select.value;
+    select.innerHTML = '<option value="">Toutes les activités</option>';
+    ACTIVITES.forEach(a => {
+      const opt = document.createElement('option');
+      opt.value = a.id;
+      opt.textContent = a.nom;
+      select.appendChild(opt);
+    });
+    if (current && ACTIVITES.some(a => a.id === current)) select.value = current;
+  }
+  document.getElementById('filtreActivite').addEventListener('change', renderPresencesTable);
+
+  // ===== EXPORT CSV =====
+  document.getElementById('exportBtn').addEventListener('click', () => {
+    const filtre = document.getElementById('filtreActivite').value;
+    let dataServeur = PRESENCES;
+    let dataPending = PENDING;
+    if (filtre) {
+      dataServeur = dataServeur.filter(p => p.activiteId === filtre);
+      dataPending = dataPending.filter(p => p.activiteId === filtre);
+    }
+    const total = dataServeur.length + dataPending.length;
+    if (total === 0) return showToast('⚠️ Aucune donnée', 'warning');
+
+    const rows = [['Nom', 'Contact', 'Adresse', 'Activité', 'Date', 'Heure', 'Statut']];
+    dataPending.forEach(p => {
+      const d = new Date(p._createdAtLocal);
+      rows.push([p.nom, p.contact || '', p.adresse || '', p.activiteNom || '',
+        d.toLocaleDateString('fr-FR'), d.toLocaleTimeString('fr-FR'), 'En attente']);
+    });
+    dataServeur.forEach(p => {
+      const d = p.createdAt?.toDate?.() || new Date();
+      rows.push([p.nom, p.contact || '', p.adresse || '', p.activiteNom || '',
+        d.toLocaleDateString('fr-FR'), d.toLocaleTimeString('fr-FR'), 'Enregistré']);
+    });
+
+    const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `presences_jcp_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('📥 CSV téléchargé !', 'success');
+  });
+
+  // ===== TOUT EFFACER =====
+  document.getElementById('clearBtn').addEventListener('click', async () => {
+    if (!confirm("⚠️ Effacer TOUTES les données ?")) return;
+    if (!confirm("Confirmer ? Action irréversible.")) return;
+    if (!db) return;
+    try {
+      const batch = writeBatch(db);
+      const actSnap = await getDocs(collection(db, 'activites'));
+      actSnap.forEach(d => batch.delete(d.ref));
+      const presSnap = await getDocs(collection(db, 'presences'));
+      presSnap.forEach(d => batch.delete(d.ref));
+      await batch.commit();
+      PENDING = [];
+      savePending();
+      showToast('🗑️ Tout effacé', 'success');
+    } catch (err) {
+      showToast('❌ Erreur : ' + err.message, 'error');
+    }
+  });
+
+  // ===== UTILITAIRES =====
+  function formatDate(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr + 'T00:00:00');
+    if (isNaN(d)) return dateStr;
+    return d.toLocaleDateString('fr-FR', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' });
+  }
+  function formatDateTime(ts) {
+    if (!ts) return '—';
+    const d = ts?.toDate ? ts.toDate() : new Date(ts);
+    if (isNaN(d)) return '—';
+    return d.toLocaleDateString('fr-FR') + ' à ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  }
+  function escapeHtml(str) {
+    return String(str ?? '').replace(/[&<>"']/g, s => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[s]));
+  }
+  window.showToast = function(message, type = 'default') {
+    const t = document.getElementById('toast');
+    t.textContent = message;
+    t.className = 'toast show ' + (type !== 'default' ? type : '');
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  };
+  const showToast = window.showToast;
+
+  // ===== DÉMARRAGE =====
+  document.getElementById('actDate').value = new Date().toISOString().split('T')[0];
+  loadPending();
+  listenFirestore();
+  updateConnectionStatus();
+
+  window.addEventListener('load', () => {
+    const params = new URLSearchParams(window.location.search);
+    const codeFromUrl = params.get('code');
+    if (codeFromUrl && /^\d{4}$/.test(codeFromUrl)) {
+      document.getElementById('codeInput').value = codeFromUrl;
+      setTimeout(verifierCode, 1500);
+    }
+  });
+
+  setInterval(() => {
+    if (navigator.onLine && PENDING.length > 0) synchroniserPending();
+  }, 30000);
+})();
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>JCP - Registre de Présence</title>
+
+<!-- PWA Meta Tags -->
+<meta name="theme-color" content="#667eea">
+<meta name="description" content="Registre de présence JCP - Jeunesse de la Cité de Paix">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="JCP Présence">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23667eea'/%3E%3Cstop offset='100%25' style='stop-color:%23764ba2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='100' fill='url(%23g)'/%3E%3Ctext x='256' y='330' font-family='Arial,sans-serif' font-size='220' font-weight='900' fill='white' text-anchor='middle'%3EJCP%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23667eea'/%3E%3Cstop offset='100%25' style='stop-color:%23764ba2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='100' fill='url(%23g)'/%3E%3Ctext x='256' y='330' font-family='Arial,sans-serif' font-size='220' font-weight='900' fill='white' text-anchor='middle'%3EJCP%3C/text%3E%3C/svg%3E">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+  :root {
+    --primary: #667eea; --primary-dark: #764ba2;
+    --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
+    --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
+    --gray-500: #6b7280; --gray-700: #374151; --gray-800: #1f2937;
+  }
+  body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; padding-top: max(20px, env(safe-area-inset-top)); }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .header { text-align: center; color: white; margin-bottom: 20px; padding-top: 10px; }
+  .header .logo {
+    width: 80px; height: 80px; margin: 0 auto 15px; border-radius: 50%;
+    background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid rgba(255,255,255,0.4); font-size: 26px; font-weight: 700;
+  }
+  .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 5px; }
+  .header p { opacity: 0.9; font-size: 13px; }
+
+  /* INSTALL BANNER */
+  .install-banner {
+    max-width: 600px; margin: 0 auto 15px;
+    padding: 14px 18px; border-radius: 14px;
+    background: white; color: var(--gray-800);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    display: flex; align-items: center; gap: 12px;
+    animation: slideDown 0.5s ease;
+  }
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+  .install-banner .icon { font-size: 28px; }
+  .install-banner .text { flex: 1; font-size: 13px; line-height: 1.4; }
+  .install-banner .text strong { display: block; font-size: 14px; color: var(--primary); margin-bottom: 2px; }
+  .install-banner button { padding: 8px 14px; font-size: 12px; border-radius: 10px; border: none; background: var(--primary); color: white; font-weight: 600; cursor: pointer; }
+  .install-banner .close { background: transparent; color: var(--gray-500); padding: 8px; font-size: 18px; }
+
+  .connection-status {
+    max-width: 600px; margin: 0 auto 15px;
+    padding: 10px 18px; border-radius: 12px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 12px; font-weight: 500;
+    transition: all 0.3s;
+  }
+  .connection-status.online {
+    background: rgba(16, 185, 129, 0.2); color: white;
+    border: 1px solid rgba(16, 185, 129, 0.5);
+  }
+  .connection-status.offline {
+    background: rgba(245, 158, 11, 0.25); color: white;
+    border: 1px solid rgba(245, 158, 11, 0.5);
+  }
+  .connection-status .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: currentColor; animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  .tabs {
+    display: flex; gap: 10px; margin-bottom: 20px;
+    background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
+    padding: 6px; border-radius: 16px; max-width: 400px;
+    margin-left: auto; margin-right: auto;
+  }
+  .tab {
+    flex: 1; padding: 12px; border: none; background: transparent;
+    color: white; font-weight: 600; border-radius: 12px; cursor: pointer;
+    transition: all 0.3s; font-size: 14px; position: relative;
+  }
+  .tab.active { background: white; color: var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+  .tab .badge-count {
+    position: absolute; top: 4px; right: 8px;
+    background: var(--danger); color: white;
+    font-size: 10px; font-weight: 700;
+    padding: 2px 6px; border-radius: 10px;
+    min-width: 18px; text-align: center;
+  }
+  .card {
+    background: white; border-radius: 24px; padding: 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15); margin-bottom: 20px;
+    animation: fadeIn 0.4s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .hidden { display: none !important; }
+  .form-group { margin-bottom: 18px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px; }
+  .form-group input, .form-group select {
+    width: 100%; padding: 14px 16px; border: 2px solid var(--gray-200);
+    border-radius: 12px; font-size: 16px; outline: none;
+    transition: all 0.2s; font-family: inherit; background: white;
+  }
+  .form-group input:focus, .form-group select:focus {
+    border-color: var(--primary); box-shadow: 0 0 0 4px rgba(102,126,234,0.1);
+  }
+  .code-input {
+    font-size: 32px !important; letter-spacing: 12px; text-align: center;
+    font-weight: 700 !important; padding: 20px !important;
+  }
+  .btn {
+    padding: 14px 24px; border: none; border-radius: 12px;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    transition: all 0.3s; font-family: inherit;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; width: 100%; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(102,126,234,0.4); }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .btn-success { background: var(--success); color: white; }
+  .btn-success:hover { background: #059669; }
+  .btn-danger { background: var(--danger); color: white; }
+  .btn-danger:hover { background: #dc2626; }
+  .btn-warning { background: var(--warning); color: white; }
+  .btn-warning:hover { background: #d97706; }
+  .btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); }
+  .btn-outline:hover { background: var(--primary); color: white; }
+  .btn-small { padding: 8px 14px; font-size: 13px; }
+  .success-msg {
+    margin-top: 20px; padding: 16px; background: #d1fae5;
+    border: 1px solid #6ee7b7; border-radius: 12px; text-align: center;
+    animation: fadeIn 0.4s ease;
+  }
+  .success-msg p:first-child { color: #065f46; font-weight: 600; font-size: 15px; }
+  .success-msg p:last-child { color: #047857; font-size: 13px; margin-top: 4px; }
+  .offline-msg {
+    margin-top: 20px; padding: 16px; background: #fef3c7;
+    border: 1px solid #fcd34d; border-radius: 12px; text-align: center;
+    animation: fadeIn 0.4s ease;
+  }
+  .offline-msg p:first-child { color: #92400e; font-weight: 600; font-size: 15px; }
+  .offline-msg p:last-child { color: #78350f; font-size: 13px; margin-top: 4px; }
+  .error-msg {
+    margin-top: 15px; padding: 14px; background: #fee2e2;
+    border: 1px solid #fca5a5; border-radius: 12px; text-align: center;
+    color: #991b1b; font-size: 14px; font-weight: 500;
+  }
+  .section-title {
+    font-size: 18px; font-weight: 700; color: var(--gray-800);
+    margin-bottom: 20px; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .stat-card { background: white; border-radius: 18px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+  .stat-card .label { font-size: 13px; color: var(--gray-500); font-weight: 500; }
+  .stat-card .value { font-size: 28px; font-weight: 700; color: var(--primary); margin-top: 6px; }
+  .stat-card .value.purple { color: var(--primary-dark); }
+  .stat-card .value.warning { color: var(--warning); }
+  .table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid var(--gray-200); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  thead { background: var(--gray-50); }
+  th {
+    text-align: left; padding: 14px 16px; font-weight: 600;
+    color: var(--gray-700); font-size: 13px; text-transform: uppercase;
+    letter-spacing: 0.5px; white-space: nowrap;
+  }
+  td { padding: 14px 16px; border-top: 1px solid var(--gray-100); color: var(--gray-700); }
+  tbody tr:hover { background: rgba(102,126,234,0.04); }
+  tbody tr:first-child td { border-top: none; }
+  tbody tr.pending { background: #fef3c7; }
+  tbody tr.pending:hover { background: #fde68a; }
+  .badge { display: inline-block; padding: 4px 12px; background: #ede9fe; color: var(--primary-dark); border-radius: 20px; font-size: 12px; font-weight: 600; }
+  .badge-warning { background: #fef3c7; color: #92400e; }
+  .badge-success { background: #d1fae5; color: #065f46; }
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--gray-500); }
+  .empty-state .icon { font-size: 48px; margin-bottom: 10px; opacity: 0.5; }
+  .activites-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .activite-card {
+    background: var(--gray-50); border: 2px solid var(--gray-200);
+    border-radius: 16px; padding: 20px; transition: all 0.2s;
+  }
+  .activite-card:hover { border-color: var(--primary); background: white; }
+  .activite-card .nom { font-weight: 700; color: var(--gray-800); margin-bottom: 6px; font-size: 16px; }
+  .activite-card .meta { font-size: 13px; color: var(--gray-500); margin-bottom: 14px; }
+  .activite-card .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .activite-code-display {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white; padding: 12px; border-radius: 10px;
+    text-align: center; margin: 12px 0;
+  }
+  .activite-code-display .label { font-size: 11px; opacity: 0.9; letter-spacing: 1px; }
+  .activite-code-display .code {
+    font-size: 24px; font-weight: 700; letter-spacing: 6px; margin-top: 4px;
+  }
+  .activite-form { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 12px; align-items: end; }
+  .activite-form .form-group { margin-bottom: 0; }
+  .toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 20px; }
+  .toolbar select {
+    padding: 10px 14px; border: 2px solid var(--gray-200);
+    border-radius: 10px; font-size: 14px; outline: none;
+    font-family: inherit; background: white; cursor: pointer;
+  }
+  .toolbar select:focus { border-color: var(--primary); }
+  .loading { text-align: center; padding: 40px; color: var(--gray-500); }
+  .loading .spinner {
+    width: 40px; height: 40px; margin: 0 auto 15px;
+    border: 3px solid var(--gray-200); border-top-color: var(--primary);
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .toast {
+    position: fixed; bottom: 30px; left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--gray-800); color: white; padding: 14px 24px;
+    border-radius: 12px; font-size: 14px; font-weight: 500;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3); opacity: 0;
+    transition: all 0.4s; z-index: 1000; max-width: 90%; text-align: center;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .toast.success { background: var(--success); }
+  .toast.warning { background: var(--warning); }
+  .toast.error { background: var(--danger); }
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px); display: flex;
+    align-items: center; justify-content: center; padding: 20px; z-index: 999;
+    overflow-y: auto;
+  }
+  .modal-overlay.hidden { display: none; }
+  .modal {
+    background: white; border-radius: 20px; padding: 28px;
+    max-width: 500px; width: 100%; animation: fadeIn 0.3s ease;
+    margin: auto;
+  }
+  .modal h3 { color: var(--gray-800); margin-bottom: 8px; font-size: 20px; }
+  .modal p { color: var(--gray-500); font-size: 14px; margin-bottom: 20px; }
+  .qr-container {
+    text-align: center; padding: 20px;
+    background: var(--gray-50); border-radius: 16px; margin: 20px 0;
+  }
+  .qr-container canvas, .qr-container img {
+    max-width: 260px; width: 100%; height: auto;
+    display: block; margin: 0 auto;
+  }
+  .step-indicator { display: flex; gap: 8px; margin-bottom: 20px; justify-content: center; }
+  .step-dot {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--gray-200); color: var(--gray-500);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600; transition: all 0.3s;
+  }
+  .step-dot.active { background: var(--primary); color: white; transform: scale(1.1); }
+  .step-dot.done { background: var(--success); color: white; }
+  .code-info {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px; background: #fef3c7; border: 1px solid #fcd34d;
+    border-radius: 10px; margin-bottom: 15px; font-size: 13px; color: #92400e;
+  }
+  .code-info .icon { font-size: 20px; }
+  @media (max-width: 720px) {
+    .card { padding: 22px; }
+    .header h1 { font-size: 22px; }
+    .activite-form { grid-template-columns: 1fr; }
+    .activite-form .btn { width: 100%; }
+    th, td { padding: 10px 12px; font-size: 13px; }
+    .stat-card .value { font-size: 24px; }
+    .code-input { font-size: 24px !important; letter-spacing: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="logo">JCP</div>
+    <h1>Registre de Présence</h1>
+    <p>Jeunesse de la Cité de Paix</p>
+  </div>
+
+  <div id="installBanner" class="install-banner hidden">
+    <span class="icon">📲</span>
+    <div class="text">
+      <strong>Installer l'appli JCP</strong>
+      Accès rapide depuis ton écran d'accueil
+    </div>
+    <button onclick="installPWA()">Installer</button>
+    <button class="close" onclick="dismissInstall()">✕</button>
+  </div>
+
+  <div id="connectionStatus" class="connection-status online">
+    <span class="dot"></span>
+    <span id="connectionText">🌐 En ligne</span>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('membre', this)">
+      ✍️ Pointer
+      <span id="pendingBadge" class="badge-count hidden">0</span>
+    </button>
+    <button class="tab" onclick="switchTab('chef', this)">📊 Tableau de bord</button>
+  </div>
+
+  <!-- VUE MEMBRE -->
+  <div id="view-membre" class="view">
+    <div class="card" style="max-width: 500px; margin: 0 auto;">
+      <h2 class="section-title" style="justify-content:center;">Marquer ma présence</h2>
+
+      <div id="step-code">
+        <div class="step-indicator">
+          <div class="step-dot active">1</div>
+          <div class="step-dot">2</div>
+        </div>
+        <div class="code-info">
+          <span class="icon">📢</span>
+          <span>Demande le <strong>code à 4 chiffres</strong> annoncé, ou scanne le QR Code.</span>
+        </div>
+        <div class="form-group">
+          <label>Code de l'activité</label>
+          <input type="tel" id="codeInput" class="code-input" placeholder="0000" maxlength="4" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+        </div>
+        <button onclick="verifierCode()" class="btn btn-primary">➡️ Continuer</button>
+        <div id="codeError" class="error-msg hidden"></div>
+      </div>
+
+      <div id="step-form" class="hidden">
+        <div class="step-indicator">
+          <div class="step-dot done">✓</div>
+          <div class="step-dot active">2</div>
+        </div>
+        <div id="activiteInfo" style="text-align: center; margin-bottom: 20px; padding: 12px; background: #ecfdf5; border-radius: 10px; border: 1px solid #6ee7b7;">
+          <div style="font-size: 12px; color: #047857; font-weight: 600;">ACTIVITÉ VALIDÉE</div>
+          <div id="activiteNomAffiche" style="font-weight: 700; color: #065f46; margin-top: 4px;"></div>
+        </div>
+        <form id="presenceForm">
+          <div class="form-group">
+            <label>Votre nom complet</label>
+            <input type="text" id="nom" placeholder="Ex : Jean Dupont" required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label>Votre contact (téléphone)</label>
+            <input type="tel" id="contact" placeholder="Ex : +243 81 23 45 67" required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label>Votre adresse</label>
+            <input type="text" id="adresse" placeholder="Ex : Kinshasa, Limete" required autocomplete="off">
+          </div>
+          <button type="submit" class="btn btn-primary">✅ Marquer ma présence</button>
+        </form>
+        <button onclick="retourCode()" class="btn btn-outline" style="width: 100%; margin-top: 10px; font-size: 13px; padding: 10px;">
+          ← Changer de code
+        </button>
+        <div id="successMsg" class="success-msg hidden">
+          <p>✨ Présence enregistrée !</p>
+          <p>Que Dieu te bénisse 🙏</p>
+        </div>
+        <div id="offlineMsg" class="offline-msg hidden">
+          <p>📶 Pas de connexion internet</p>
+          <p>Ta présence a été sauvegardée. Elle sera envoyée dès que tu auras internet.</p>
+        </div>
+      </div>
+
+      <div id="membreLoading" class="loading">
+        <div class="spinner"></div>
+        <p>Chargement...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- VUE CHEF -->
+  <div id="view-chef" class="view hidden">
+    <div class="card">
+      <h2 class="section-title">➕ Créer une nouvelle activité</h2>
+      <form id="activiteForm" class="activite-form">
+        <div class="form-group">
+          <label>Nom de l'activité</label>
+          <input type="text" id="actNom" placeholder="Ex : Culte du dimanche" required>
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="actDate" required>
+        </div>
+        <div class="form-group">
+          <label>Heure</label>
+          <input type="time" id="actHeure">
+        </div>
+        <button type="submit" class="btn btn-primary">Créer</button>
+      </form>
+      <p style="font-size: 12px; color: var(--gray-500); margin-top: 12px;">
+        💡 Un code à 4 chiffres et un QR Code seront générés automatiquement.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">
+        📋 Activités existantes
+        <span id="activitesCount" class="badge">0</span>
+      </h2>
+      <div id="activitesList" class="activites-grid"></div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="label">Total présences</div>
+        <div class="value" id="totalPresences">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Activités créées</div>
+        <div class="value purple" id="totalActivites">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">En attente de sync</div>
+        <div class="value warning" id="totalPending">0</div>
+      </div>
+    </div>
+
+    <div id="syncBanner" class="card hidden" style="background: #fef3c7; border: 2px solid #fcd34d;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap;">
+        <div>
+          <div style="font-weight: 700; color: #92400e;">📶 Pointages en attente</div>
+          <div style="font-size: 13px; color: #78350f; margin-top: 4px;">
+            <span id="pendingCountText">0</span> présence(s) en attente de synchronisation.
+          </div>
+        </div>
+        <button class="btn btn-warning btn-small" onclick="synchroniserMaintenant()">🔄 Synchroniser</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">
+        👥 Liste des présents
+        <span id="presencesCount" class="badge">0</span>
+      </h2>
+      <div class="toolbar">
+        <select id="filtreActivite">
+          <option value="">Toutes les activités</option>
+        </select>
+        <button class="btn btn-success btn-small" id="exportBtn">📥 Exporter CSV</button>
+        <button class="btn btn-danger btn-small" id="clearBtn">🗑️ Tout effacer</button>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nom</th>
+              <th>Contact</th>
+              <th>Adresse</th>
+              <th>Activité</th>
+              <th>Date & heure</th>
+              <th>Statut</th>
+            </tr>
+          </thead>
+          <tbody id="presencesTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="passwordModal" class="modal-overlay hidden">
+  <div class="modal">
+    <h3>🔐 Accès responsable</h3>
+    <p>Entre le mot de passe pour accéder au tableau de bord.</p>
+    <div class="form-group">
+      <input type="password" id="pwdInput" placeholder="Mot de passe" autocomplete="off">
+    </div>
+    <button class="btn btn-primary" onclick="checkPassword()">Valider</button>
+  </div>
+</div>
+
+<div id="qrModal" class="modal-overlay hidden">
+  <div class="modal">
+    <h3 style="text-align:center;">📱 QR Code de l'activité</h3>
+    <p style="text-align:center;">Affiche ce QR Code aux jeunes pour qu'ils scannent</p>
+    <div class="qr-container">
+      <div id="qrcode"></div>
+    </div>
+    <div style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 16px; border-radius: 12px; text-align: center; margin-bottom: 20px;">
+      <div style="font-size: 12px; opacity: 0.9; letter-spacing: 2px;">CODE À 4 CHIFFRES</div>
+      <div id="qrCodeText" style="font-size: 40px; font-weight: 700; letter-spacing: 8px; margin-top: 6px;">0000</div>
+    </div>
+    <p style="text-align:center; font-size: 12px; color: var(--gray-500);">
+      📢 Annonce aussi ce code à voix haute
+    </p>
+    <button class="btn btn-primary" onclick="closeQR()" style="margin-top: 15px;">Fermer</button>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+<script>
+/* =====================================================
+   PARTIE 1 : PWA - MANIFEST + SERVICE WORKER INTÉGRÉS
+   ===================================================== */
+
+// --- Génération du manifest PWA ---
+(function generateManifest() {
+  const iconSVG = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#667eea"/><stop offset="100%" style="stop-color:#764ba2"/></linearGradient></defs><rect width="512" height="512" rx="100" fill="url(#g)"/><text x="256" y="330" font-family="Arial,sans-serif" font-size="220" font-weight="900" fill="white" text-anchor="middle">JCP</text></svg>`)}`;
+
+  const manifest = {
+    name: "JCP - Registre de Présence",
+    short_name: "JCP Présence",
+    description: "Registre de présence en ligne pour la Jeunesse de la Cité de Paix",
+    start_url: "./index.html",
+    scope: "./",
+    display: "standalone",
+    orientation: "portrait",
+    background_color: "#667eea",
+    theme_color: "#667eea",
+    lang: "fr",
+    icons: [
+      { src: iconSVG, sizes: "192x192", type: "image/svg+xml", purpose: "any" },
+      { src: iconSVG, sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }
+    ]
+  };
+
+  const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('link');
+  link.rel = 'manifest';
+  link.href = url;
+  document.head.appendChild(link);
+})();
+
+// --- Enregistrement du Service Worker (via Blob) ---
+(function registerServiceWorker() {
+  if (!('serviceWorker' in navigator)) {
+    console.warn('⚠️ Service Worker non supporté');
     return;
   }
-  container.innerHTML = ACTIVITES.map(a => `
-    <div class="activite-card">
-      <div class="nom">${escapeHtml(a.nom)}</div>
-      <div class="meta">📅 ${formatDate(a.date)}${a.heure ? ' • 🕐 ' + a.heure : ''}</div>
-      <button class="btn btn-danger btn-small" onclick="supprimerActivite('${a.id}')">Supprimer</button>
-    </div>
-  `).join('');
-}
 
-window.supprimerActivite = async function(id) {
-  if (!confirm("Supprimer cette activité ainsi que ses présences ?")) return;
-  if (!db) return;
-  try {
-    await deleteDoc(doc(db, 'activites', id));
-    const toDelete = PRESENCES.filter(p => p.activiteId === id);
-    for (const p of toDelete) await deleteDoc(doc(db, 'presences', p.id));
-    showToast('🗑️ Activité supprimée');
-  } catch (err) {
-    showToast('❌ Erreur : ' + err.message);
+  const swCode = `
+    const CACHE_NAME = 'jcp-cache-v1';
+    const FILES_TO_CACHE = [
+      './',
+      './index.html',
+      'https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js',
+      'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap',
+      'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js',
+      'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js'
+    ];
+
+    self.addEventListener('install', (event) => {
+      console.log('[SW] Installation');
+      event.waitUntil(
+        caches.open(CACHE_NAME).then((cache) => {
+          return cache.addAll(FILES_TO_CACHE).catch(err => {
+            console.warn('[SW] Certains fichiers non cachés:', err);
+          });
+        })
+      );
+      self.skipWaiting();
+    });
+
+    self.addEventListener('activate', (event) => {
+      console.log('[SW] Activation');
+      event.waitUntil(
+        caches.keys().then((keys) => {
+          return Promise.all(
+            keys.map((key) => {
+              if (key !== CACHE_NAME) return caches.delete(key);
+            })
+          );
+        })
+      );
+      self.clients.claim();
+    });
+
+    self.addEventListener('fetch', (event) => {
+      const url = new URL(event.request.url);
+
+      // Ne pas intercepter Firebase (nécessite internet)
+      if (url.hostname.includes('firestore.googleapis.com') ||
+          url.hostname.includes('firebaseio.com')) {
+        return;
+      }
+
+      // Ne pas intercepter les requêtes non-GET
+      if (event.request.method !== 'GET') return;
+
+      event.respondWith(
+        caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) {
+            // Servir depuis le cache + mettre à jour en arrière-plan
+            fetch(event.request).then((response) => {
+              if (response && response.status === 200) {
+                caches.open(CACHE_NAME).then((cache) => {
+                  cache.put(event.request, response.clone());
+                });
+              }
+            }).catch(() => {});
+            return cachedResponse;
+          }
+
+          // Pas en cache → internet
+          return fetch(event.request).then((response) => {
+            if (response && response.status === 200 && event.request.method === 'GET') {
+              const responseClone = response.clone();
+              caches.open(CACHE_NAME).then((cache) => {
+                cache.put(event.request, responseClone);
+              });
+            }
+            return response;
+          }).catch(() => {
+            if (event.request.mode === 'navigate') {
+              return caches.match('./index.html');
+            }
+          });
+        })
+      );
+    });
+  `;
+
+  const blob = new Blob([swCode], { type: 'application/javascript' });
+  const swUrl = URL.createObjectURL(blob);
+
+  navigator.serviceWorker.register(swUrl)
+    .then(reg => console.log('✅ Service Worker enregistré:', reg.scope))
+    .catch(err => console.warn('⚠️ Erreur SW:', err));
+})();
+
+// --- Bandeau installation PWA ---
+let deferredPrompt = null;
+const INSTALL_DISMISSED = localStorage.getItem('jcp_install_dismissed');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (!INSTALL_DISMISSED && !window.matchMedia('(display-mode: standalone)').matches) {
+    document.getElementById('installBanner').classList.remove('hidden');
   }
+});
+
+window.installPWA = async function() {
+  if (!deferredPrompt) {
+    showToast('ℹ️ Menu navigateur → "Ajouter à l\'écran d\'accueil"', 'warning');
+    return;
+  }
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if (outcome === 'accepted') showToast('✅ Appli installée !', 'success');
+  deferredPrompt = null;
+  document.getElementById('installBanner').classList.add('hidden');
 };
 
-/* ============ STATISTIQUES ============ */
-function renderStats() {
-  document.getElementById('totalPresences').textContent = PRESENCES.length;
-  document.getElementById('totalActivites').textContent = ACTIVITES.length;
-  document.getElementById('dernierePresence').textContent = PRESENCES[0] ? PRESENCES[0].nom : '—';
+window.dismissInstall = function() {
+  localStorage.setItem('jcp_install_dismissed', '1');
+  document.getElementById('installBanner').classList.add('hidden');
+};
+
+if (window.matchMedia('(display-mode: standalone)').matches) {
+  document.getElementById('installBanner').classList.add('hidden');
 }
 
-/* ============ TABLEAU DES PRÉSENCES ============ */
-function renderPresencesTable() {
-  const filtre = document.getElementById('filtreActivite').value;
-  let data = PRESENCES;
-  if (filtre) data = data.filter(p => p.activiteId === filtre);
+/* =====================================================
+   PARTIE 2 : LOGIQUE PRINCIPALE (Firebase + UI)
+   ===================================================== */
 
-  const tbody = document.getElementById('presencesTable');
-  document.getElementById('presencesCount').textContent = data.length;
+// Chargement dynamique des modules Firebase
+(async function initApp() {
+  let db = null;
+  let firebaseReady = false;
+  let addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp, writeBatch, getDocs, collection;
 
-  if (data.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="4">
-      <div class="empty-state"><div class="icon">👥</div>
-      <p>Aucune présence enregistrée</p></div></td></tr>`;
-    return;
-  }
-  tbody.innerHTML = data.map((p, i) => `
-    <tr>
-      <td>${i + 1}</td>
-      <td><strong>${escapeHtml(p.nom)}</strong></td>
-      <td><span class="badge">${escapeHtml(p.activiteNom || '—')}</span></td>
-      <td>${formatDateTime(p.createdAt)}</td>
-    </tr>
-  `).join('');
-}
+  const firebaseConfig = {
+    apiKey: "AIzaSyClpmA2ALxOVTaVYiP7VX9p9cQrT92rNlU",
+    authDomain: "jeunesse-539c3.firebaseapp.com",
+    projectId: "jeunesse-539c3",
+    storageBucket: "jeunesse-539c3.firebasestorage.app",
+    messagingSenderId: "650737435601",
+    appId: "1:650737435601:web:6f0d089531a58c34c6d6f0"
+  };
 
-/* ============ FILTRE ============ */
-function refreshFiltre() {
-  const select = document.getElementById('filtreActivite');
-  const current = select.value;
-  select.innerHTML = '<option value="">Toutes les activités</option>';
-  ACTIVITES.forEach(a => {
-    const opt = document.createElement('option');
-    opt.value = a.id;
-    opt.textContent = a.nom;
-    select.appendChild(opt);
-  });
-  if (current && ACTIVITES.some(a => a.id === current)) select.value = current;
-}
-document.getElementById('filtreActivite').addEventListener('change', renderPresencesTable);
+  const CHEF_PASSWORD = "jcp2024";
+  const LS_PENDING = 'jcp_pending_presences';
+  const LS_ACTIVITES_CACHE = 'jcp_activites_cache';
 
-/* ============ EXPORT CSV ============ */
-document.getElementById('exportBtn').addEventListener('click', () => {
-  const filtre = document.getElementById('filtreActivite').value;
-  let data = PRESENCES;
-  if (filtre) data = data.filter(p => p.activiteId === filtre);
-  if (data.length === 0) return showToast('⚠️ Aucune donnée à exporter');
-
-  const rows = [['Nom', 'Activité', 'Date', 'Heure']];
-  data.forEach(p => {
-    const d = p.createdAt?.toDate?.() || new Date();
-    rows.push([p.nom, p.activiteNom || '',
-      d.toLocaleDateString('fr-FR'),
-      d.toLocaleTimeString('fr-FR')]);
-  });
-  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
-  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `presences_jcp_${new Date().toISOString().split('T')[0]}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast('📥 Export CSV téléchargé !');
-});
-
-/* ============ TOUT EFFACER ============ */
-document.getElementById('clearBtn').addEventListener('click', async () => {
-  if (!confirm("⚠️ Effacer TOUTES les données (activités + présences) ?")) return;
-  if (!confirm("Confirmer une dernière fois ? Action irréversible.")) return;
-  if (!db) return;
   try {
-    const batch = writeBatch(db);
-    const actSnap = await getDocs(collection(db, 'activites'));
-    actSnap.forEach(d => batch.delete(d.ref));
-    const presSnap = await getDocs(collection(db, 'presences'));
-    presSnap.forEach(d => batch.delete(d.ref));
-    await batch.commit();
-    showToast('🗑️ Toutes les données effacées');
-  } catch (err) {
-    showToast('❌ Erreur : ' + err.message);
+    const appMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+    const fsMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+
+    const app = appMod.initializeApp(firebaseConfig);
+    db = fsMod.getFirestore(app);
+    addDoc = fsMod.addDoc;
+    deleteDoc = fsMod.deleteDoc;
+    doc = fsMod.doc;
+    onSnapshot = fsMod.onSnapshot;
+    query = fsMod.query;
+    orderBy = fsMod.orderBy;
+    serverTimestamp = fsMod.serverTimestamp;
+    writeBatch = fsMod.writeBatch;
+    getDocs = fsMod.getDocs;
+    collection = fsMod.collection;
+    firebaseReady = true;
+  } catch (e) {
+    console.error("Erreur Firebase :", e);
   }
-});
 
-/* ============ UTILITAIRES ============ */
-function formatDate(dateStr) {
-  if (!dateStr) return '';
-  const d = new Date(dateStr + 'T00:00:00');
-  if (isNaN(d)) return dateStr;
-  return d.toLocaleDateString('fr-FR', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' });
-}
-function formatDateTime(ts) {
-  if (!ts) return '—';
-  const d = ts?.toDate ? ts.toDate() : new Date(ts);
-  if (isNaN(d)) return '—';
-  return d.toLocaleDateString('fr-FR') + ' à ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-}
-function escapeHtml(str) {
-  return String(str ?? '').replace(/[&<>"']/g, s => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-  }[s]));
-}
-function showToast(message) {
-  const t = document.getElementById('toast');
-  t.textContent = message;
-  t.classList.add('show');
-  clearTimeout(window._toastTimer);
-  window._toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
-}
+  let ACTIVITES = [];
+  let PRESENCES = [];
+  let PENDING = [];
+  let isChefUnlocked = false;
+  let activiteValidee = null;
+  let isOnline = navigator.onLine;
 
-/* ============ DÉMARRAGE ============ */
-document.getElementById('actDate').value = new Date().toISOString().split('T')[0];
-listenFirestore();
+  // ===== STATUT CONNEXION =====
+  function updateConnectionStatus() {
+    isOnline = navigator.onLine;
+    const status = document.getElementById('connectionStatus');
+    const text = document.getElementById('connectionText');
+
+    if (isOnline && firebaseReady) {
+      status.className = 'connection-status online';
+      text.textContent = '🌐 En ligne — Synchronisation active';
+      setTimeout(synchroniserPending, 500);
+    } else if (!isOnline) {
+      status.className = 'connection-status offline';
+      text.textContent = '📶 Hors ligne — Les pointages seront sauvegardés';
+    } else {
+      status.className = 'connection-status offline';
+      text.textContent = '⚠️ Firebase non configuré';
+    }
+    updatePendingBadge();
+  }
+
+  window.addEventListener('online', updateConnectionStatus);
+  window.addEventListener('offline', updateConnectionStatus);
+
+  // ===== GESTION POINTAGES EN ATTENTE =====
+  function loadPending() {
+    try { PENDING = JSON.parse(localStorage.getItem(LS_PENDING)) || []; }
+    catch { PENDING = []; }
+  }
+  function savePending() {
+    localStorage.setItem(LS_PENDING, JSON.stringify(PENDING));
+    updatePendingBadge();
+  }
+  function addPending(presence) {
+    presence._localId = 'local_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+    presence._createdAtLocal = new Date().toISOString();
+    PENDING.push(presence);
+    savePending();
+  }
+  function removePending(localId) {
+    PENDING = PENDING.filter(p => p._localId !== localId);
+    savePending();
+  }
+
+  function updatePendingBadge() {
+    const badge = document.getElementById('pendingBadge');
+    const count = PENDING.length;
+    if (count > 0) {
+      badge.textContent = count;
+      badge.classList.remove('hidden');
+    } else {
+      badge.classList.add('hidden');
+    }
+    const totalPending = document.getElementById('totalPending');
+    if (totalPending) totalPending.textContent = count;
+    const syncBanner = document.getElementById('syncBanner');
+    const pendingCountText = document.getElementById('pendingCountText');
+    if (syncBanner && pendingCountText) {
+      if (count > 0) {
+        syncBanner.classList.remove('hidden');
+        pendingCountText.textContent = count;
+      } else {
+        syncBanner.classList.add('hidden');
+      }
+    }
+    renderPresencesTable();
+  }
+
+  // ===== SYNCHRONISATION =====
+  async function synchroniserPending() {
+    if (!db || !navigator.onLine || PENDING.length === 0) return;
+    let succes = 0;
+    const aRetirer = [];
+    for (const p of PENDING) {
+      try {
+        await addDoc(collection(db, 'presences'), {
+          nom: p.nom, contact: p.contact, adresse: p.adresse,
+          activiteId: p.activiteId, activiteNom: p.activiteNom,
+          createdAt: serverTimestamp(), syncedAt: serverTimestamp()
+        });
+        aRetirer.push(p._localId);
+        succes++;
+      } catch (err) { console.error("Échec sync:", err); }
+    }
+    aRetirer.forEach(id => removePending(id));
+    if (succes > 0) showToast(`✅ ${succes} présence(s) synchronisée(s) !`, 'success');
+  }
+
+  window.synchroniserMaintenant = async function() {
+    if (!navigator.onLine) return showToast('📶 Pas de connexion', 'warning');
+    if (PENDING.length === 0) return showToast('ℹ️ Aucun pointage en attente', 'success');
+    showToast('⏳ Synchronisation...');
+    await synchroniserPending();
+  };
+
+  // ===== NAVIGATION =====
+  window.switchTab = function(tab, btn) {
+    if (tab === 'chef' && !isChefUnlocked) {
+      document.getElementById('passwordModal').classList.remove('hidden');
+      document.getElementById('pwdInput').value = '';
+      document.getElementById('pwdInput').focus();
+      window._pendingTab = btn;
+      return;
+    }
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+    document.getElementById('view-' + tab).classList.remove('hidden');
+    if (tab === 'chef') renderPresencesTable();
+  };
+
+  window.checkPassword = function() {
+    const val = document.getElementById('pwdInput').value;
+    if (val === CHEF_PASSWORD) {
+      isChefUnlocked = true;
+      document.getElementById('passwordModal').classList.add('hidden');
+      if (window._pendingTab) {
+        switchTab('chef', window._pendingTab);
+        window._pendingTab = null;
+      }
+    } else {
+      showToast('❌ Mot de passe incorrect', 'error');
+      document.getElementById('pwdInput').value = '';
+    }
+  };
+
+  document.getElementById('pwdInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkPassword();
+  });
+
+  // ===== CACHE ACTIVITÉS =====
+  function cacherActivites(activites) {
+    try {
+      localStorage.setItem(LS_ACTIVITES_CACHE, JSON.stringify(
+        activites.map(a => ({ id: a.id, nom: a.nom, date: a.date, heure: a.heure, code: a.code }))
+      ));
+    } catch (e) {}
+  }
+  function chargerActivitesCache() {
+    try {
+      const cached = JSON.parse(localStorage.getItem(LS_ACTIVITES_CACHE));
+      if (cached && Array.isArray(cached)) ACTIVITES = cached;
+    } catch (e) {}
+  }
+
+  // ===== ÉCOUTE FIRESTORE =====
+  function listenFirestore() {
+    if (!db) {
+      chargerActivitesCache();
+      document.getElementById('membreLoading').classList.add('hidden');
+      return;
+    }
+    chargerActivitesCache();
+
+    onSnapshot(
+      query(collection(db, 'activites'), orderBy('createdAt', 'desc')),
+      (snap) => {
+        ACTIVITES = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        cacherActivites(ACTIVITES);
+        renderActivitesList();
+        renderStats();
+        refreshFiltre();
+        document.getElementById('membreLoading').classList.add('hidden');
+      },
+      (err) => {
+        console.error("Erreur activites:", err);
+        document.getElementById('membreLoading').classList.add('hidden');
+      }
+    );
+
+    onSnapshot(
+      query(collection(db, 'presences'), orderBy('createdAt', 'desc')),
+      (snap) => {
+        PRESENCES = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderPresencesTable();
+        renderStats();
+      },
+      (err) => console.error("Erreur presences:", err)
+    );
+  }
+
+  // ===== VÉRIFICATION CODE =====
+  window.verifierCode = function() {
+    const code = document.getElementById('codeInput').value.trim();
+    const errDiv = document.getElementById('codeError');
+    errDiv.classList.add('hidden');
+
+    if (!code || code.length !== 4) {
+      errDiv.textContent = '⚠️ Entre un code à 4 chiffres';
+      errDiv.classList.remove('hidden');
+      return;
+    }
+    const activite = ACTIVITES.find(a => a.code === code);
+    if (!activite) {
+      errDiv.textContent = '❌ Code invalide. Vérifie avec le responsable.';
+      errDiv.classList.remove('hidden');
+      return;
+    }
+    const actDate = new Date(activite.date + 'T00:00:00');
+    const maintenant = new Date();
+    const heures24 = 24 * 60 * 60 * 1000;
+    if ((maintenant - actDate) > (heures24 * 2)) {
+      errDiv.textContent = '⏰ Ce code n\'est plus valide.';
+      errDiv.classList.remove('hidden');
+      return;
+    }
+    activiteValidee = activite;
+    document.getElementById('activiteNomAffiche').textContent = 
+      `${activite.nom} — ${formatDate(activite.date)}`;
+    document.getElementById('step-code').classList.add('hidden');
+    document.getElementById('step-form').classList.remove('hidden');
+    document.getElementById('nom').focus();
+  };
+
+  window.retourCode = function() {
+    activiteValidee = null;
+    document.getElementById('codeInput').value = '';
+    document.getElementById('step-form').classList.add('hidden');
+    document.getElementById('step-code').classList.remove('hidden');
+    document.getElementById('successMsg').classList.add('hidden');
+    document.getElementById('offlineMsg').classList.add('hidden');
+  };
+
+  document.getElementById('codeInput').addEventListener('input', function(e) {
+    this.value = this.value.replace(/\D/g, '').slice(0, 4);
+    if (this.value.length === 4) setTimeout(verifierCode, 300);
+  });
+
+  document.getElementById('codeInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') verifierCode();
+  });
+
+  // ===== ENREGISTRER PRÉSENCE =====
+  document.getElementById('presenceForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (!activiteValidee) return showToast('⚠️ Code non validé', 'error');
+
+    const nom = document.getElementById('nom').value.trim();
+    const contact = document.getElementById('contact').value.trim();
+    const adresse = document.getElementById('adresse').value.trim();
+    if (!nom) return showToast('⚠️ Entre ton nom', 'error');
+    if (!contact) return showToast('⚠️ Entre ton contact', 'error');
+    if (!adresse) return showToast('⚠️ Entre ton adresse', 'error');
+
+    const dejaServeur = PRESENCES.find(p =>
+      p.activiteId === activiteValidee.id && (p.nom || '').toLowerCase() === nom.toLowerCase()
+    );
+    const dejaLocal = PENDING.find(p =>
+      p.activiteId === activiteValidee.id && (p.nom || '').toLowerCase() === nom.toLowerCase()
+    );
+    if (dejaServeur || dejaLocal) {
+      return showToast('ℹ️ Tu as déjà pointé', 'warning');
+    }
+
+    const btn = this.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = '⏳ Enregistrement...';
+
+    const presenceData = {
+      nom, contact, adresse,
+      activiteId: activiteValidee.id,
+      activiteNom: activiteValidee.nom
+    };
+
+    if (navigator.onLine && db) {
+      try {
+        await addDoc(collection(db, 'presences'), {
+          ...presenceData, createdAt: serverTimestamp()
+        });
+        document.getElementById('presenceForm').reset();
+        document.getElementById('successMsg').classList.remove('hidden');
+        showToast('✅ Présence enregistrée !', 'success');
+        setTimeout(retourCode, 4000);
+      } catch (err) {
+        console.error("Erreur en ligne:", err);
+        addPending(presenceData);
+        document.getElementById('presenceForm').reset();
+        document.getElementById('offlineMsg').classList.remove('hidden');
+        showToast('📶 Sauvegardé localement', 'warning');
+        setTimeout(retourCode, 5000);
+      }
+    } else {
+      addPending(presenceData);
+      document.getElementById('presenceForm').reset();
+      document.getElementById('offlineMsg').classList.remove('hidden');
+      showToast('📶 Sauvegardé ! Sync bientôt', 'warning');
+      setTimeout(retourCode, 5000);
+    }
+
+    btn.disabled = false;
+    btn.textContent = '✅ Marquer ma présence';
+  });
+
+  // ===== CRÉER ACTIVITÉ =====
+  function genererCode() {
+    let code, existe = true, tentatives = 0;
+    do {
+      code = Math.floor(1000 + Math.random() * 9000).toString();
+      existe = ACTIVITES.some(a => a.code === code);
+      tentatives++;
+    } while (existe && tentatives < 50);
+    return code;
+  }
+
+  document.getElementById('activiteForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (!db) return showToast('⚠️ Firebase non configuré', 'error');
+    if (!navigator.onLine) return showToast('📶 Connexion requise', 'warning');
+
+    const nom = document.getElementById('actNom').value.trim();
+    const date = document.getElementById('actDate').value;
+    const heure = document.getElementById('actHeure').value;
+    if (!nom || !date) return showToast('⚠️ Nom et date obligatoires', 'error');
+
+    const code = genererCode();
+    try {
+      await addDoc(collection(db, 'activites'), {
+        nom, date, heure, code, createdAt: serverTimestamp()
+      });
+      e.target.reset();
+      document.getElementById('actDate').value = new Date().toISOString().split('T')[0];
+      showToast(`✅ Activité créée ! Code : ${code}`, 'success');
+    } catch (err) {
+      showToast('❌ Erreur : ' + err.message, 'error');
+    }
+  });
+
+  // ===== AFFICHER ACTIVITÉS =====
+  function renderActivitesList() {
+    const container = document.getElementById('activitesList');
+    if (!container) return;
+    document.getElementById('activitesCount').textContent = ACTIVITES.length;
+    if (ACTIVITES.length === 0) {
+      container.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;">
+        <div class="icon">📭</div><p>Aucune activité créée</p></div>`;
+      return;
+    }
+    container.innerHTML = ACTIVITES.map(a => `
+      <div class="activite-card">
+        <div class="nom">${escapeHtml(a.nom)}</div>
+        <div class="meta">📅 ${formatDate(a.date)}${a.heure ? ' • 🕐 ' + a.heure : ''}</div>
+        <div class="activite-code-display">
+          <div class="label">CODE À 4 CHIFFRES</div>
+          <div class="code">${a.code || '----'}</div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary btn-small" onclick="afficherQR('${a.id}')">📱 QR Code</button>
+          <button class="btn btn-danger btn-small" onclick="supprimerActivite('${a.id}')">🗑️</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  window.afficherQR = function(id) {
+    const activite = ACTIVITES.find(a => a.id === id);
+    if (!activite) return;
+    const url = window.location.origin + window.location.pathname + '?code=' + activite.code;
+    const qrDiv = document.getElementById('qrcode');
+    qrDiv.innerHTML = '';
+    new QRCode(qrDiv, {
+      text: url, width: 260, height: 260,
+      colorDark: "#1f2937", colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+    document.getElementById('qrCodeText').textContent = activite.code;
+    document.getElementById('qrModal').classList.remove('hidden');
+  };
+
+  window.closeQR = function() {
+    document.getElementById('qrModal').classList.add('hidden');
+    document.getElementById('qrcode').innerHTML = '';
+  };
+
+  window.supprimerActivite = async function(id) {
+    if (!confirm("Supprimer cette activité et ses présences ?")) return;
+    if (!db) return;
+    if (!navigator.onLine) return showToast('📶 Connexion requise', 'warning');
+    try {
+      await deleteDoc(doc(db, 'activites', id));
+      const toDelete = PRESENCES.filter(p => p.activiteId === id);
+      for (const p of toDelete) await deleteDoc(doc(db, 'presences', p.id));
+      showToast('🗑️ Activité supprimée', 'success');
+    } catch (err) {
+      showToast('❌ Erreur : ' + err.message, 'error');
+    }
+  };
+
+  // ===== STATS =====
+  function renderStats() {
+    const el1 = document.getElementById('totalPresences');
+    const el2 = document.getElementById('totalActivites');
+    const el3 = document.getElementById('totalPending');
+    if (el1) el1.textContent = PRESENCES.length;
+    if (el2) el2.textContent = ACTIVITES.length;
+    if (el3) el3.textContent = PENDING.length;
+  }
+
+  // ===== TABLEAU PRÉSENCES =====
+  function renderPresencesTable() {
+    const tableEl = document.getElementById('presencesTable');
+    if (!tableEl) return;
+    const filtre = document.getElementById('filtreActivite').value;
+    let dataServeur = PRESENCES;
+    let dataPending = PENDING;
+    if (filtre) {
+      dataServeur = dataServeur.filter(p => p.activiteId === filtre);
+      dataPending = dataPending.filter(p => p.activiteId === filtre);
+    }
+    const totalCount = dataServeur.length + dataPending.length;
+    document.getElementById('presencesCount').textContent = totalCount;
+
+    if (totalCount === 0) {
+      tableEl.innerHTML = `<tr><td colspan="7">
+        <div class="empty-state"><div class="icon">👥</div>
+        <p>Aucune présence enregistrée</p></div></td></tr>`;
+      return;
+    }
+
+    const lignesPending = dataPending.map((p) => `
+      <tr class="pending">
+        <td>⏳</td>
+        <td><strong>${escapeHtml(p.nom)}</strong></td>
+        <td>${escapeHtml(p.contact || '—')}</td>
+        <td>${escapeHtml(p.adresse || '—')}</td>
+        <td><span class="badge">${escapeHtml(p.activiteNom || '—')}</span></td>
+        <td>${formatDateTime(p._createdAtLocal)}</td>
+        <td><span class="badge badge-warning">⏳ En attente</span></td>
+      </tr>
+    `).join('');
+
+    const lignesServeur = dataServeur.map((p, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td><strong>${escapeHtml(p.nom)}</strong></td>
+        <td>${escapeHtml(p.contact || '—')}</td>
+        <td>${escapeHtml(p.adresse || '—')}</td>
+        <td><span class="badge">${escapeHtml(p.activiteNom || '—')}</span></td>
+        <td>${formatDateTime(p.createdAt)}</td>
+        <td><span class="badge badge-success">✅ Enregistré</span></td>
+      </tr>
+    `).join('');
+
+    tableEl.innerHTML = lignesPending + lignesServeur;
+  }
+
+  function refreshFiltre() {
+    const select = document.getElementById('filtreActivite');
+    if (!select) return;
+    const current = select.value;
+    select.innerHTML = '<option value="">Toutes les activités</option>';
+    ACTIVITES.forEach(a => {
+      const opt = document.createElement('option');
+      opt.value = a.id;
+      opt.textContent = a.nom;
+      select.appendChild(opt);
+    });
+    if (current && ACTIVITES.some(a => a.id === current)) select.value = current;
+  }
+  document.getElementById('filtreActivite').addEventListener('change', renderPresencesTable);
+
+  // ===== EXPORT CSV =====
+  document.getElementById('exportBtn').addEventListener('click', () => {
+    const filtre = document.getElementById('filtreActivite').value;
+    let dataServeur = PRESENCES;
+    let dataPending = PENDING;
+    if (filtre) {
+      dataServeur = dataServeur.filter(p => p.activiteId === filtre);
+      dataPending = dataPending.filter(p => p.activiteId === filtre);
+    }
+    const total = dataServeur.length + dataPending.length;
+    if (total === 0) return showToast('⚠️ Aucune donnée', 'warning');
+
+    const rows = [['Nom', 'Contact', 'Adresse', 'Activité', 'Date', 'Heure', 'Statut']];
+    dataPending.forEach(p => {
+      const d = new Date(p._createdAtLocal);
+      rows.push([p.nom, p.contact || '', p.adresse || '', p.activiteNom || '',
+        d.toLocaleDateString('fr-FR'), d.toLocaleTimeString('fr-FR'), 'En attente']);
+    });
+    dataServeur.forEach(p => {
+      const d = p.createdAt?.toDate?.() || new Date();
+      rows.push([p.nom, p.contact || '', p.adresse || '', p.activiteNom || '',
+        d.toLocaleDateString('fr-FR'), d.toLocaleTimeString('fr-FR'), 'Enregistré']);
+    });
+
+    const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `presences_jcp_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('📥 CSV téléchargé !', 'success');
+  });
+
+  // ===== TOUT EFFACER =====
+  document.getElementById('clearBtn').addEventListener('click', async () => {
+    if (!confirm("⚠️ Effacer TOUTES les données ?")) return;
+    if (!confirm("Confirmer ? Action irréversible.")) return;
+    if (!db) return;
+    try {
+      const batch = writeBatch(db);
+      const actSnap = await getDocs(collection(db, 'activites'));
+      actSnap.forEach(d => batch.delete(d.ref));
+      const presSnap = await getDocs(collection(db, 'presences'));
+      presSnap.forEach(d => batch.delete(d.ref));
+      await batch.commit();
+      PENDING = [];
+      savePending();
+      showToast('🗑️ Tout effacé', 'success');
+    } catch (err) {
+      showToast('❌ Erreur : ' + err.message, 'error');
+    }
+  });
+
+  // ===== UTILITAIRES =====
+  function formatDate(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr + 'T00:00:00');
+    if (isNaN(d)) return dateStr;
+    return d.toLocaleDateString('fr-FR', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' });
+  }
+  function formatDateTime(ts) {
+    if (!ts) return '—';
+    const d = ts?.toDate ? ts.toDate() : new Date(ts);
+    if (isNaN(d)) return '—';
+    return d.toLocaleDateString('fr-FR') + ' à ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  }
+  function escapeHtml(str) {
+    return String(str ?? '').replace(/[&<>"']/g, s => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[s]));
+  }
+  window.showToast = function(message, type = 'default') {
+    const t = document.getElementById('toast');
+    t.textContent = message;
+    t.className = 'toast show ' + (type !== 'default' ? type : '');
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  };
+  const showToast = window.showToast;
+
+  // ===== DÉMARRAGE =====
+  document.getElementById('actDate').value = new Date().toISOString().split('T')[0];
+  loadPending();
+  listenFirestore();
+  updateConnectionStatus();
+
+  window.addEventListener('load', () => {
+    const params = new URLSearchParams(window.location.search);
+    const codeFromUrl = params.get('code');
+    if (codeFromUrl && /^\d{4}$/.test(codeFromUrl)) {
+      document.getElementById('codeInput').value = codeFromUrl;
+      setTimeout(verifierCode, 1500);
+    }
+  });
+
+  setInterval(() => {
+    if (navigator.onLine && PENDING.length > 0) synchroniserPending();
+  }, 30000);
+})();
 </script>
 
 </body>
